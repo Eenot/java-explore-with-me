@@ -49,7 +49,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>http.client.HttpClientApplication</mainClass>
+                    <mainClass>http.client.HttpClientApplication</mainClass> <!-- Замените com.example.MainClass на ваш главный класс -->
                 </configuration>
             </plugin>
         </plugins>
