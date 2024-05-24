@@ -48,6 +48,6 @@ public class StatsController {
             throw new IncorrectDataException();
         }
         log.debug("Gateway: получение статистики");
-        return statsClient.getStats(start,end, uris, unique);
+        return statsClient.getStats(start, end, uris, unique);
     }
 }
