@@ -1,7 +1,6 @@
 package http.client.hit;
 
 import dto.HitDto;
-import http.client.exception.IncorrectDataException;
 import http.client.exception.IpIsNullException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -14,14 +13,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 @Validated
 public class StatsController {
+
 
     private final Logger log = LoggerFactory.getLogger(StatsController.class);
     private final StatsClient statsClient;
@@ -40,13 +38,6 @@ public class StatsController {
                                            @RequestParam String end,
                                            @RequestParam(required = false) List<String> uris,
                                            @RequestParam(required = false) Boolean unique) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime startDate = LocalDateTime.parse(start, formatter);
-        LocalDateTime endDate = LocalDateTime.parse(end, formatter);
-
-        if (startDate.isAfter(endDate) || endDate.isBefore(startDate)) {
-            throw new IncorrectDataException();
-        }
         log.debug("Gateway: получение статистики");
         return statsClient.getStats(start, end, uris, unique);
     }
