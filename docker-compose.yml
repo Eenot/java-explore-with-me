@@ -10,6 +10,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/ewm-stats
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=4315
+      - server.port=9090
     # - TZ=Europe/Moscow
 
   stats-db:
