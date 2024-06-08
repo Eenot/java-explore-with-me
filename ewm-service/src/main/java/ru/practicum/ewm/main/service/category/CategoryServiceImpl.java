@@ -29,8 +29,15 @@ public class CategoryServiceImpl implements CategoryService {
         if (categoryDto.getName() == null || categoryDto.getName().isBlank()) {
             throw new IncorrectDataException("Поле: name. Ошибка: не должно быть пустым. Значение: null");
         }
-
         checkNameLength(categoryDto.getName().length());
+
+        Category categoryWithName = categoryRepository.findCategoryByName(categoryDto.getName()).orElse(null);
+        if (categoryWithName != null) {
+            throw new ConflictDataException("Поле: name. Название должно быть уникальным!");
+        }
+
+        Category category = categoryRepository.save(CategoryMapper.toCategory(categoryDto));
+        return CategoryMapper.toCategoryDto(category);
     }
 
     @Override
