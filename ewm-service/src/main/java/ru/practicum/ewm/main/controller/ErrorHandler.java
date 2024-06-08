@@ -2,6 +2,7 @@ package ru.practicum.ewm.main.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -125,4 +126,20 @@ public class ErrorHandler {
                 .errors(Collections.singletonList(stackTrace))
                 .build();
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ApiError handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        log.error("400: {}", e.getMessage());
+        StringWriter out = new StringWriter();
+        e.printStackTrace(new PrintWriter(out));
+        String stackTrace = out.toString();
+        return ApiError.builder()
+                .status(HttpStatus.FORBIDDEN)
+                .reason("Validation not passed. Null data.")
+                .message(e.getMessage())
+                .errors(Collections.singletonList(stackTrace))
+                .build();
+    }
+
 }

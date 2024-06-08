@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.ewm.main.dto.event.EventFullDto;
 import ru.practicum.ewm.main.dto.event.NewEventDto;
+import ru.practicum.ewm.main.dto.search.AdminSearchEventsParamsDto;
 import ru.practicum.ewm.main.service.event.EventService;
 
 import javax.validation.constraints.Min;
@@ -31,7 +32,17 @@ public class EventControllerAdmin {
                                                 @RequestParam(required = false) List<Long> categories, @RequestParam(required = false) String rangeStart,
                                                 @RequestParam(required = false) String rangeEnd, @RequestParam(defaultValue = "0") int from,
                                                 @RequestParam(defaultValue = "10") int size) {
-        return eventService.findEventsBySearch(users, categories, states, rangeStart, rangeEnd, from, size);
+        log.debug("Admin: поиск событий");
+        AdminSearchEventsParamsDto params = AdminSearchEventsParamsDto.builder()
+                .userIds(users)
+                .categoriesIds(categories)
+                .rangeStart(rangeStart)
+                .rangeEnd(rangeEnd)
+                .states(states)
+                .from(from)
+                .size(size)
+                .build();
+        return eventService.findEventsBySearch(params);
     }
 
     @PatchMapping("/events/{eventId}")

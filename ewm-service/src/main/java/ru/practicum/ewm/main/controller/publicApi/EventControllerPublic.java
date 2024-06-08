@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.ewm.main.dto.event.EventFullDto;
 import ru.practicum.ewm.main.dto.event.EventShortDto;
+import ru.practicum.ewm.main.dto.search.PublicSearchEventsParamsDto;
 import ru.practicum.ewm.main.service.event.EventService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -36,8 +37,20 @@ public class EventControllerPublic {
                                                 @RequestParam(defaultValue = "0") int from,
                                                 @RequestParam(defaultValue = "10") int size) {
         log.debug("Public: поиск событий");
-        return eventService.findEventsByPublicSearch(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from,
-                size, request.getRemoteAddr());
+        PublicSearchEventsParamsDto params = PublicSearchEventsParamsDto.builder()
+                .ip(request.getRemoteAddr())
+                .categories(categories)
+                .onlyAvailable(onlyAvailable)
+                .sort(sort)
+                .text(text)
+                .rangeEnd(rangeEnd)
+                .rangeStart(rangeStart)
+                .from(from)
+                .size(size)
+                .paid(paid)
+                .build();
+
+        return eventService.findEventsByPublicSearch(params);
     }
 
     @GetMapping("/{eventId}")
