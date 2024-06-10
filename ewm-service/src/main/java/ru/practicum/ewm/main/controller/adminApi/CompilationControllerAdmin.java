@@ -16,7 +16,6 @@ import ru.practicum.ewm.main.dto.compilation.CompilationDto;
 import ru.practicum.ewm.main.dto.compilation.CompilationResponseDto;
 import ru.practicum.ewm.main.service.compilation.CompilationService;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
 
 @RestController
@@ -30,7 +29,7 @@ public class CompilationControllerAdmin {
 
     @PostMapping("/compilations")
     @ResponseStatus(HttpStatus.CREATED)
-    public CompilationResponseDto createCompilation(@RequestBody @Valid CompilationDto compilation) {
+    public CompilationResponseDto createCompilation(@RequestBody CompilationDto compilation) {
         log.debug("Admin: создание подборки");
         return compilationService.createCompilation(compilation);
     }

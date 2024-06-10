@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.ewm.main.dto.CategoryDto;
 import ru.practicum.ewm.main.service.category.CategoryService;
 
-import javax.validation.Valid;
-
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -28,7 +26,7 @@ public class CategoryControllerAdmin {
 
     @PostMapping("/categories")
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryDto createCategory(@RequestBody @Valid CategoryDto categoryDto) {
+    public CategoryDto createCategory(@RequestBody CategoryDto categoryDto) {
         log.debug("Admin: создание категории: {}", categoryDto);
         return categoryService.addCategory(categoryDto);
     }

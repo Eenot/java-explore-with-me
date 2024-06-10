@@ -1,7 +1,5 @@
 package ru.practicum.ewm.main.mapper;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import ru.practicum.ewm.main.dto.compilation.CompilationDto;
 import ru.practicum.ewm.main.dto.compilation.CompilationResponseDto;
 import ru.practicum.ewm.main.dto.event.EventShortDto;
@@ -9,14 +7,13 @@ import ru.practicum.ewm.main.model.Compilation;
 
 import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CompilationMapper {
 
-    public static Compilation toCompilation(CompilationDto compilation) {
+    public static Compilation toCompilation(CompilationDto compilationDto) {
         return Compilation.builder()
-                .events(compilation.getEvents())
-                .title(compilation.getTitle())
-                .pinned(compilation.getPinned())
+                .events(compilationDto.getEvents())
+                .title(compilationDto.getTitle())
+                .pinned(compilationDto.getPinned())
                 .build();
     }
 
@@ -29,8 +26,7 @@ public class CompilationMapper {
                 .build();
     }
 
-    public static Compilation toUpdateCompilation(Compilation oldCompilation, CompilationDto newCompilation,
-                                                  List<Long> events) {
+    public static Compilation toUpdateCompilation(Compilation oldCompilation, CompilationDto newCompilation, List<Long> events) {
         return Compilation.builder()
                 .id(oldCompilation.getId())
                 .title(newCompilation.getTitle() != null ? newCompilation.getTitle() : oldCompilation.getTitle())

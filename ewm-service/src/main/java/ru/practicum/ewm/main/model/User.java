@@ -28,10 +28,11 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
     @Unique
     private String name;
+
     @Unique
     @Email
     private String email;
-
 }

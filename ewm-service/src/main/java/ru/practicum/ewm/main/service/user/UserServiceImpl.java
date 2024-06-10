@@ -26,6 +26,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto addUser(UserDto user) {
+        if (user.getEmail() == null || user.getEmail().isBlank()) {
+            throw new IncorrectDataException("Поле: email. Ошибка: не должен быть пуст. Значение: null");
+        }
+        if (user.getName() == null || user.getName().isBlank()) {
+            throw new IncorrectDataException("Поле: name. Ошибка: не должен быть пуст. Значение: null");
+        }
         if (user.getName().length() < 2 || user.getName().length() > 250) {
             throw new IncorrectDataException("Поле: name. Ошибка: длина должна быть > 2 && < 250. Значение: " + user.getName().length());
         }
@@ -36,6 +42,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.findUserByName(user.getName()).isPresent()) {
             throw new ConflictDataException("Поле: name. Ошибка: имя должно быть уникальным");
         }
+
         User userFromDb = userRepository.save(toUser(user));
         return toUserDto(userFromDb);
     }

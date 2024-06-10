@@ -1,11 +1,8 @@
 package ru.practicum.ewm.main.mapper;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
 import ru.practicum.ewm.main.dto.CategoryDto;
 import ru.practicum.ewm.main.model.Category;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CategoryMapper {
 
     public static Category toCategory(CategoryDto categoryDto) {
@@ -14,13 +11,14 @@ public class CategoryMapper {
                 .build();
     }
 
-    public static Category toCategoryUpdate(CategoryDto newCat, Category oldCat) {
-        if (newCat.getName().isEmpty()) {
-            newCat.setName(null);
+    public static Category toCategoryUpdate(CategoryDto newCategory, Category oldCategory) {
+        if (newCategory.getName().isEmpty()) {
+            newCategory.setName(null);
         }
+
         return Category.builder()
-                .id(newCat.getId())
-                .name(newCat.getName() != null ? newCat.getName() : oldCat.getName())
+                .id(newCategory.getId())
+                .name(newCategory.getName() != null ? newCategory.getName() : oldCategory.getName())
                 .build();
     }
 

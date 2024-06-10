@@ -26,10 +26,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto addCategory(CategoryDto categoryDto) {
+        if (categoryDto.getName() == null || categoryDto.getName().isBlank()) {
+            throw new IncorrectDataException("Поле: name. Ошибка: не должно быть пустым. Значение: null");
+        }
         checkNameLength(categoryDto.getName().length());
-        Category catWithName = categoryRepository.findCategoryByName(categoryDto.getName()).orElse(null);
-        if (catWithName != null) {
-            throw new ConflictDataException("Поле: name. Название должно быть уникальным");
+
+        Category categoryWithName = categoryRepository.findCategoryByName(categoryDto.getName()).orElse(null);
+        if (categoryWithName != null) {
+            throw new ConflictDataException("Поле: name. Название должно быть уникальным!");
         }
 
         Category category = categoryRepository.save(CategoryMapper.toCategory(categoryDto));
@@ -41,13 +45,15 @@ public class CategoryServiceImpl implements CategoryService {
         if (categoryDto.getName() == null) {
             categoryDto.setName("");
         }
+
         checkNameLength(categoryDto.getName().length());
-        Category catWithName = categoryRepository.findCategoryByName(categoryDto.getName()).orElse(null);
-        if (catWithName != null && catWithName.getId() != categoryDto.getId()) {
-            throw new ConflictDataException("Поле: name. Название должно быть уникальным");
+        Category categoryWithName = categoryRepository.findCategoryByName(categoryDto.getName()).orElse(null);
+        if (categoryWithName != null && categoryWithName.getId() != categoryDto.getId()) {
+            throw new ConflictDataException("Поле: name. Название должно быть уникальным!");
         }
-        Category catFromDb = findCategory(categoryDto.getId());
-        Category newCategory = CategoryMapper.toCategoryUpdate(categoryDto, catFromDb);
+
+        Category categoryFromDb = findCategory(categoryDto.getId());
+        Category newCategory = CategoryMapper.toCategoryUpdate(categoryDto, categoryFromDb);
         categoryRepository.save(newCategory);
         return CategoryMapper.toCategoryDto(newCategory);
     }

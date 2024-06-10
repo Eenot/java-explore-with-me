@@ -12,8 +12,8 @@ import javax.persistence.Embeddable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Getter
 @Setter
+@Getter
 @EqualsAndHashCode
 @Embeddable
 public class Location {
