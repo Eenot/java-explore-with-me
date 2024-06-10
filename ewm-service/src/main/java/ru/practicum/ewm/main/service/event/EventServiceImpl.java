@@ -295,9 +295,6 @@ public class EventServiceImpl implements EventService {
                 throw new IncorrectDataException("Поле: desc. Ошибка: недопустимая длина");
             }
         }
-        if (newEvent.getParticipantLimit() < 0) {
-            throw new IncorrectDataException("Количество участников не может быть отрицательным");
-        }
         if (newEvent.getTitle() != null) {
             if (newEvent.getTitle().length() > 120 || newEvent.getTitle().length() < 3) {
                 throw new IncorrectDataException("Прое: title. Ошибка: недопустимая длина");

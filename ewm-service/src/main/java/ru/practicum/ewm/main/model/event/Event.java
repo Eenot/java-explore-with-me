@@ -21,6 +21,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -69,6 +70,8 @@ public class Event {
     private Location location;
     private Boolean isPaid;
     private Boolean isRequestModeration;
+
+    @Positive
     private int participantLimit;
 
     @Enumerated(EnumType.STRING)
