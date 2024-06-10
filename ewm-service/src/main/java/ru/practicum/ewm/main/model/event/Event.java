@@ -21,6 +21,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -69,6 +70,7 @@ public class Event {
     private Location location;
     private Boolean isPaid;
     private Boolean isRequestModeration;
+    @Min(0)
     private int participantLimit;
 
     @Enumerated(EnumType.STRING)

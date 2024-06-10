@@ -290,6 +290,7 @@ public class EventServiceImpl implements EventService {
                 throw new IncorrectDataException("Поле: annotation. Ошибка: недопустимая длина");
             }
         }
+
         if (newEvent.getDescription() != null) {
             if (newEvent.getDescription().length() > 7000 || newEvent.getDescription().length() < 20) {
                 throw new IncorrectDataException("Поле: desc. Ошибка: недопустимая длина");
@@ -297,7 +298,7 @@ public class EventServiceImpl implements EventService {
         }
         if (newEvent.getTitle() != null) {
             if (newEvent.getTitle().length() > 120 || newEvent.getTitle().length() < 3) {
-                throw new IncorrectDataException("Прое: title. Ошибка: недопустимая длина");
+                throw new IncorrectDataException("Поле: title. Ошибка: недопустимая длина");
             }
         }
     }
