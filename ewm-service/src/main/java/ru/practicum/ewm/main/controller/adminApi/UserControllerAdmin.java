@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.ewm.main.dto.UserDto;
 import ru.practicum.ewm.main.service.user.UserService;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class UserControllerAdmin {
 
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto createUser(@RequestBody UserDto userDto) {
+    public UserDto createUser(@RequestBody @Valid UserDto userDto) {
         log.debug("Admin: создание пользователя: {}", userDto.getId());
         return userService.addUser(userDto);
     }

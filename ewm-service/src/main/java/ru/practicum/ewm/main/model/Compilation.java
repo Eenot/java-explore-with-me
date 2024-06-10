@@ -30,11 +30,9 @@ public class Compilation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     @ElementCollection
     private List<Long> events;
     private boolean pinned;
-
     @Unique
     @Column(length = 50)
     private String title;

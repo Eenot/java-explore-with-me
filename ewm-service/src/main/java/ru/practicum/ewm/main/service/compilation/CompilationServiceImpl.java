@@ -31,11 +31,9 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public CompilationResponseDto createCompilation(CompilationDto compilation) {
-        if (compilation.getTitle() == null || compilation.getTitle().isBlank()) {
-            throw new IncorrectDataException("Поле: title. Ошибка: не должен быть пусть. Значение: null");
-        }
         if (compilation.getTitle().length() > 50) {
-            throw new IncorrectDataException("Поле: title. Ошибка: длина должна быть < 50. Значение: >50");
+            throw new IncorrectDataException("Поле: title. Ошибка:  длина должна быть < 50. Значение: >50");
+
         }
         if (compilation.getPinned() == null) {
             compilation.setPinned(false);

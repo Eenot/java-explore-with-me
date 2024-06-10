@@ -302,7 +302,7 @@ public class EventServiceImpl implements EventService {
             }
         }
 
-        if (newEvent.getParticipantLimit() <= 0) {
+        if (newEvent.getParticipantLimit() < 0) {
             throw new IncorrectDataException("Количество участников не может быть отрицательным!");
         }
     }
