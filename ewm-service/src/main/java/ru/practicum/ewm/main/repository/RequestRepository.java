@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface RequestRepository extends JpaRepository<Request, Long> {
 
     @Query("select r from Request r where r.event.id = :eventId AND r.requester.id = :requesterId")
-    Optional<Request> findUserRequestToEvent(long eventId, long requeserId);
+    Optional<Request> findUserRequestToEvent(long eventId, long requesterId);
 
     @Query("select r from Request r where r.requester.id = :userId")
     List<Request> findUserRequests(long userId);
