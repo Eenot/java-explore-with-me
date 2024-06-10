@@ -70,8 +70,6 @@ public class Event {
     private Location location;
     private Boolean isPaid;
     private Boolean isRequestModeration;
-
-    @Positive
     private int participantLimit;
 
     @Enumerated(EnumType.STRING)
