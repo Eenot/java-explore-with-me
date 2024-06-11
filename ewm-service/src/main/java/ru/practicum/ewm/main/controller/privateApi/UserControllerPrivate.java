@@ -5,7 +5,6 @@ import ru.practicum.ewm.main.dto.request.RequestDto;
 import ru.practicum.ewm.main.dto.event.NewEventDto;
 import ru.practicum.ewm.main.dto.request.RequestListDto;
 import ru.practicum.ewm.main.dto.request.RequestUpdateStatusDto;
-import ru.practicum.ewm.main.exception.IncorrectDataException;
 import ru.practicum.ewm.main.service.event.EventService;
 import ru.practicum.ewm.main.service.request.RequestService;
 import lombok.RequiredArgsConstructor;
@@ -31,9 +30,6 @@ public class UserControllerPrivate {
     @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto createEvent(@PathVariable @Min(0) long userId, @RequestBody NewEventDto event) {
         log.debug("Private: создание события пользователем с id: {}", userId);
-        if (event.getParticipantLimit() < 0) {
-            throw new IncorrectDataException("ошибка");
-        }
         return eventService.createEvent(event, userId);
     }
 
@@ -54,9 +50,6 @@ public class UserControllerPrivate {
     public EventFullDto updateUserEvent(@PathVariable @Min(0) long userId, @PathVariable @Min(0) long eventId,
                                         @RequestBody NewEventDto event) {
         log.debug("Private: обновление события по id : {}, пользователя с id: {}",eventId, userId);
-        if (event.getParticipantLimit() < 0) {
-            throw new IncorrectDataException("ошибка");
-        }
         return eventService.updateEventById(userId, eventId, event);
     }
 
