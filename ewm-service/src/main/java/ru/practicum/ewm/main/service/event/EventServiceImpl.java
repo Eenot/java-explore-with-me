@@ -65,6 +65,11 @@ public class EventServiceImpl implements EventService {
             throw new IncorrectDataException("Field: annotation. Error: не должно быть пустым. Value: blank");
         }
 
+        if (eventDto.getParticipantLimit() < 0) {
+            throw new IncorrectDataException("Field: participantLimit. Error: количество участников не может быть отрицательным. " +
+                    "Value: " + eventDto.getParticipantLimit());
+        }
+
         checkAboutEventInfo(eventDto);
 
         LocalDateTime eventTime = EventMapper.toDateFromString(eventDto.getEventDate());
@@ -121,6 +126,12 @@ public class EventServiceImpl implements EventService {
                         " Value: " + newEvent.getEventDate());
             }
         }
+
+        if (newEvent.getParticipantLimit() < 0) {
+            throw new IncorrectDataException("Field: participantLimit. Error: количество участников не может быть отрицательным. " +
+                    "Value: " + newEvent.getParticipantLimit());
+        }
+
         checkAboutEventInfo(newEvent);
 
         Event newMappedEvent = EventMapper.toEventUpdate(eventFromDb, newEvent, category);
