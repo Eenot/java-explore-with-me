@@ -8,7 +8,7 @@ public enum EventState {
     PUBLISHED,
     CANCELED;
 
-    public static EventState converToEventState(String state) {
+    public static EventState convertToEventState(String state) {
         try {
             return EventState.valueOf(state);
         } catch (Exception e) {

@@ -18,10 +18,10 @@ public class EndpointHit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
-    String app;
-    String uri;
-    String ip;
+    private long id;
+    private String app;
+    private String uri;
+    private String ip;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    LocalDateTime timestamp;
+    private LocalDateTime timestamp;
 }

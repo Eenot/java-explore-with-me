@@ -30,10 +30,10 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     public CompilationResponseDto createCompilation(CompilationDto compilation) {
         if (compilation.getTitle() == null || compilation.getTitle().isBlank()) {
-            throw new IncorrectDataException("Field: title. Error: must not be blank. Value: null");
+            throw new IncorrectDataException("Field: title. Error: не должно быть пустым. Value: null");
         }
         if (compilation.getTitle().length() > 50) {
-            throw new IncorrectDataException("Field: title. Error: must be < 50. Value: >50");
+            throw new IncorrectDataException("Field: title. Error: длина должна быть < 50. Value: >50");
 
         }
         if (compilation.getPinned() == null) {
@@ -76,7 +76,7 @@ public class CompilationServiceImpl implements CompilationService {
         }
 
         if (compilation.getTitle() != null && compilation.getTitle().length() > 50) {
-            throw new IncorrectDataException("Field: title. Error: title length must be less then 50!");
+            throw new IncorrectDataException("Field: title. Error: длина должна быть меньше 50!");
         }
         Compilation newCompilationToSave = toUpdateCompilation(fromDb, compilation, ids);
 
@@ -102,6 +102,6 @@ public class CompilationServiceImpl implements CompilationService {
 
     private Compilation getCompilation(long compId) {
         return compilationRepository.findById(compId)
-                .orElseThrow(() -> new NoDataException("Compilation with id = " + compId + " was not found"));
+                .orElseThrow(() -> new NoDataException("Подборка с id = " + compId + " не найдена"));
     }
 }

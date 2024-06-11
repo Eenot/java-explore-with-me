@@ -74,7 +74,7 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public RequestDto cancelUserRequest(long userId, long requestId) {
         Request request = requestRepository.findById(requestId)
-                .orElseThrow(() -> new NoDataException("Request with id = " + requestId + " was not found"));
+                .orElseThrow(() -> new NoDataException("Запрос с id = " + requestId + " не найден"));
         if (userId != request.getRequester().getId()) {
             throw new ForbiddenDataException("Field: request. Error: пользователь отменяет не свой запрос");
         }
@@ -142,11 +142,11 @@ public class RequestServiceImpl implements RequestService {
 
     private User findUserById(long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new NoDataException("User with id = " + userId + " was not found"));
+                .orElseThrow(() -> new NoDataException("Пользователь с id = " + userId + " не найден"));
     }
 
     private Event findEventById(long eventId) {
         return eventRepository.findById(eventId)
-                .orElseThrow(() -> new NoDataException("Event with id = " + eventId + " was not found"));
+                .orElseThrow(() -> new NoDataException("Событие с id = " + eventId + " не найдено"));
     }
 }

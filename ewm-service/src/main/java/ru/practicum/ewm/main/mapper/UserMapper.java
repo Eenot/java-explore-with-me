@@ -19,5 +19,4 @@ public class UserMapper {
                 .email(user.getEmail())
                 .build();
     }
-
 }

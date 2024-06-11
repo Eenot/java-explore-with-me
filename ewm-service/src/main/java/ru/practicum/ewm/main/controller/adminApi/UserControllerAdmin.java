@@ -23,21 +23,21 @@ public class UserControllerAdmin {
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto createUser(@RequestBody UserDto userDto) {
-        log.debug("Admin: creating user: {}", userDto);
+        log.debug("Admin: создание пользователя с id: {}", userDto.getId());
         return userService.addUser(userDto);
     }
 
     @GetMapping("/users")
     public List<UserDto> getUsers(@RequestParam(required = false) long[] ids, @RequestParam(defaultValue = "0") @Min(0) int from,
                                   @RequestParam(defaultValue = "10") @Min(0) int size) {
-        log.debug("Admin: getting users");
+        log.debug("Admin: получение списка пользователей");
         return userService.getUsers(ids, from, size);
     }
 
     @DeleteMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public UserDto deleteUser(@PathVariable long userId) {
-        log.debug("Admin: deleting user with id: {}", userId);
+        log.debug("Admin: удаление пользователя с id: {}", userId);
         return userService.deleteUser(userId);
     }
 }

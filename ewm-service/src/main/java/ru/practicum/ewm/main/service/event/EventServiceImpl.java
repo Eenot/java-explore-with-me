@@ -40,29 +40,29 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto createEvent(NewEventDto eventDto, long userId) {
         if (eventDto.getCategory() == null) {
-            throw new IncorrectDataException("Field: category. Error: must not be blank. Value: null");
+            throw new IncorrectDataException("Field: category. Error: не должно быть пустым. Value: null");
         }
         if (eventDto.getAnnotation() == null) {
-            throw new IncorrectDataException("Field: annotation. Error: must not be blank. Value: null");
+            throw new IncorrectDataException("Field: annotation. Error: не должно быть пустым. Value: null");
         }
         if (eventDto.getEventDate() == null) {
-            throw new IncorrectDataException("Field: event date. Error: must not be blank. Value: null");
+            throw new IncorrectDataException("Field: event date. Error: не должно быть пустым. Value: null");
         }
         if (eventDto.getDescription() == null) {
-            throw new IncorrectDataException("Field: description. Error: must not be blank. Value: null");
+            throw new IncorrectDataException("Field: description. Error: не должно быть пустым. Value: null");
         }
         if (eventDto.getLocation() == null) {
-            throw new IncorrectDataException("Field: location. Error: must not be blank. Value: null");
+            throw new IncorrectDataException("Field: location. Error: не должно быть пустым. Value: null");
         }
         if (eventDto.getTitle() == null) {
-            throw new IncorrectDataException("Field: title. Error: must not be blank. Value: null");
+            throw new IncorrectDataException("Field: title. Error: не должно быть пустым. Value: null");
         }
 
         if (eventDto.getDescription().isBlank()) {
-            throw new IncorrectDataException("Field: description. Error: must not be blank. Value: blank");
+            throw new IncorrectDataException("Field: description. Error: не должно быть пустым. Value: blank");
         }
         if (eventDto.getAnnotation().isBlank()) {
-            throw new IncorrectDataException("Field: annotation. Error: must not be blank. Value: blank");
+            throw new IncorrectDataException("Field: annotation. Error: не должно быть пустым. Value: blank");
         }
 
         checkAboutEventInfo(eventDto);
@@ -101,19 +101,19 @@ public class EventServiceImpl implements EventService {
     public EventFullDto getUserEventById(long userId, long eventId) {
         findUserById(userId);
         return EventMapper.toEventFullDtoFromEvent(eventRepository.findEventById(userId, eventId)
-                .orElseThrow(() -> new NoDataException("Event with id = " + eventId + " was not found")));
+                .orElseThrow(() -> new NoDataException("Событие с id = " + eventId + " не найдено")));
     }
 
     @Override
     public EventFullDto updateEventById(long userId, long eventId, NewEventDto newEvent) {
         Event eventFromDb = eventRepository.findEventById(userId, eventId)
-                .orElseThrow(() -> new NoDataException("Event with id = " + eventId + " was not found"));
+                .orElseThrow(() -> new NoDataException("Событие с id = " + eventId + " не найдено"));
         Category category = null;
         if (newEvent.getCategory() != null) {
             category = findCategoryById(newEvent.getCategory());
         }
         if (eventFromDb.getState().equals(EventState.PUBLISHED)) {
-            throw new ConflictDataException("Only pending or canceled events can be changed");
+            throw new ConflictDataException("Только события со статусом PENDING или CANCELED могут быть изменены");
         }
         if (newEvent.getEventDate() != null && !newEvent.getEventDate().isEmpty()) {
             if (LocalDateTime.now().until(EventMapper.toDateFromString(newEvent.getEventDate()), ChronoUnit.HOURS) < 2) {
@@ -136,7 +136,7 @@ public class EventServiceImpl implements EventService {
         List<EventState> eventStates;
         if (states != null) {
             eventStates = states.stream()
-                    .map(EventState::converToEventState)
+                    .map(EventState::convertToEventState)
                     .collect(Collectors.toList());
         } else {
             eventStates = null;
@@ -265,12 +265,12 @@ public class EventServiceImpl implements EventService {
 
     private User findUserById(long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new NoDataException("User with id = " + userId + " was not found"));
+                .orElseThrow(() -> new NoDataException("Пользователь с id = " + userId + " не найден"));
     }
 
     private Category findCategoryById(long categoryId) {
         return categoryRepository.findById((categoryId))
-                .orElseThrow(() -> new NoDataException("Category with id = " + categoryId + " was not found"));
+                .orElseThrow(() -> new NoDataException("Категория с id = " + categoryId + " не найдена"));
     }
 
     private void saveStat(String uri, String ip) {
@@ -286,17 +286,17 @@ public class EventServiceImpl implements EventService {
     private void checkAboutEventInfo(NewEventDto newEvent) {
         if (newEvent.getAnnotation() != null) {
             if (newEvent.getAnnotation().length() > 2000 || newEvent.getAnnotation().length() < 20) {
-                throw new IncorrectDataException("Field: annotation. Error: incorrect length");
+                throw new IncorrectDataException("Field: annotation. Error: некорректная длина");
             }
         }
         if (newEvent.getDescription() != null) {
             if (newEvent.getDescription().length() > 7000 || newEvent.getDescription().length() < 20) {
-                throw new IncorrectDataException("Field: desc. Error: incorrect length");
+                throw new IncorrectDataException("Field: desc. Error: некорректная длина");
             }
         }
         if (newEvent.getTitle() != null) {
             if (newEvent.getTitle().length() > 120 || newEvent.getTitle().length() < 3) {
-                throw new IncorrectDataException("Field: title Error: incorrect length");
+                throw new IncorrectDataException("Field: title Error: некорректная длина");
             }
         }
     }

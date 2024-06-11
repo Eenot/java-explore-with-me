@@ -32,7 +32,7 @@ public class HitServiceImpl implements HitService {
         List<StatsDto> stats = new ArrayList<>();
 
         if (uris == null) {
-            uris = new ArrayList<>(hitRepository.findAllHipsBetweenDates(toDateFromString(start), toDateFromString(end)));
+            uris = new ArrayList<>(hitRepository.findAllHitsBetweenDates(toDateFromString(start), toDateFromString(end)));
         }
 
         if (unique == null) {
@@ -40,7 +40,7 @@ public class HitServiceImpl implements HitService {
         }
 
         if (toDateFromString(start).isAfter(toDateFromString(end))) {
-            throw new IncorrectDataException("Start date must be before end date");
+            throw new IncorrectDataException("Дата начала должна быть раньше даты окончания!");
         }
 
         for (String uri : uris) {

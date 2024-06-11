@@ -125,6 +125,4 @@ public class ErrorHandler {
                 .errors(Collections.singletonList(stackTrace))
                 .build();
     }
-
-
 }

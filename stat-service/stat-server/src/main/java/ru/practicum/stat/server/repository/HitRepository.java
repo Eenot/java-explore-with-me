@@ -18,5 +18,5 @@ public interface HitRepository extends JpaRepository<EndpointHit, Long> {
     long findHitByUriAndUniqueIp(LocalDateTime start, LocalDateTime end, String uri);
 
     @Query("SELECT e.uri FROM EndpointHit e WHERE e.timestamp BETWEEN :start AND :end")
-    List<String> findAllHipsBetweenDates(LocalDateTime start, LocalDateTime end);
+    List<String> findAllHitsBetweenDates(LocalDateTime start, LocalDateTime end);
 }

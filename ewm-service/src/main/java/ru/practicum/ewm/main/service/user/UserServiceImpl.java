@@ -27,29 +27,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto addUser(UserDto user) {
         if (user.getEmail() == null || user.getEmail().isBlank()) {
-            throw new IncorrectDataException("Field: email. Error: must not be blank. Value: null");
+            throw new IncorrectDataException("Field: email. Error: не должно быть пустым. Value: null");
         }
         if (user.getName() == null || user.getName().isBlank()) {
-            throw new IncorrectDataException("Field: name. Error: must not be blank. Value: null");
+            throw new IncorrectDataException("Field: name. Error: не должно быть пустым. Value: null");
         }
         if (user.getName().length() < 2 || user.getName().length() > 250) {
-            throw new IncorrectDataException("Field: name. Error: must be > 2 && < 250. Value: " + user.getName().length());
+            throw new IncorrectDataException("Field: name. Error: должно быть > 2 && < 250. Value: " + user.getName().length());
         }
         if (user.getEmail().length() < 6 || user.getEmail().length() > 254) {
-            throw new IncorrectDataException("Field: email. Error: must be > 6 && < 254. Value: " + user.getEmail().length());
+            throw new IncorrectDataException("Field: email. Error: должно быть > 6 && < 254. Value: " + user.getEmail().length());
         }
 
         if (userRepository.findUserByName(user.getName()).isPresent()) {
-            throw new ConflictDataException("Field: name. Error: name must be unique");
+            throw new ConflictDataException("Field: name. Error: имя должно быть уникальным");
         }
-         User userFromDb = userRepository.save(toUser(user));
+        User userFromDb = userRepository.save(toUser(user));
         return toUserDto(userFromDb);
     }
 
     @Override
     public UserDto deleteUser(long userId) {
         User userFromDb = userRepository.findById(userId)
-                .orElseThrow(() -> new NoDataException("User with id = " + userId + " was not found"));
+                .orElseThrow(() -> new NoDataException("Пользователь с id = " + userId + " не найден"));
         userRepository.delete(userFromDb);
         return toUserDto(userFromDb);
     }

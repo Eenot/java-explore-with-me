@@ -27,14 +27,14 @@ public class EventControllerPublic {
                                                  @RequestParam(required = false) String rangeEnd, @RequestParam(required = false) Boolean onlyAvailable,
                                                  @RequestParam(required = false) String sort, @RequestParam(defaultValue = "0") int from,
                                                  @RequestParam(defaultValue = "10") int size) {
-        log.debug("Public: search events");
+        log.debug("Public: поиск событий");
         return eventService.findEventsByPublicSearch(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort,
                 from, size, request.getRemoteAddr());
     }
 
     @GetMapping("/{eventId}")
     public EventFullDto getEventById(@PathVariable long eventId) {
-        log.debug("Public: getting event by id: {}", eventId);
+        log.debug("Public: получение события с id: {}", eventId);
         return eventService.getUserEventByIdPublic(eventId, request.getRemoteAddr());
     }
 }

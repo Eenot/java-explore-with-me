@@ -30,7 +30,7 @@ public class EventControllerAdmin {
 
     @PatchMapping("/events/{eventId}")
     public EventFullDto updateEventByAdmin(@PathVariable @Min(0) long eventId, @RequestBody NewEventDto event) {
-        log.debug("Admin: updating event with id: {}", eventId);
+        log.debug("Admin: обновление события с id: {}", eventId);
         return eventService.updateEventByAdmin(eventId, event);
     }
 }

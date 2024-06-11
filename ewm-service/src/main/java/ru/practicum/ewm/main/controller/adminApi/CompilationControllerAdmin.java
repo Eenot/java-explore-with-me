@@ -23,21 +23,21 @@ public class CompilationControllerAdmin {
     @PostMapping("/compilations")
     @ResponseStatus(HttpStatus.CREATED)
     public CompilationResponseDto  createCompilation(@RequestBody CompilationDto compilation) {
-        log.debug("Admin: create compilation");
+        log.debug("Admin: создание подборки");
         return compilationService.createCompilation(compilation);
     }
 
     @DeleteMapping("/compilations/{compId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCompilation(@PathVariable @Min(0) long compId) {
-        log.debug("Admin: deleting compilation with id: {}", compId);
+        log.debug("Admin: удаление подборки с id: {}", compId);
         compilationService.deleteCompilation(compId);
     }
 
     @PatchMapping("/compilations/{compId}")
     public CompilationResponseDto updateCompilation(@PathVariable @Min(0) long compId,
                                                     @RequestBody CompilationDto compilation) {
-        log.debug("Admin: updating compilation with id: {}", compId);
+        log.debug("Admin: обновление подборки с id: {}", compId);
         return compilationService.updateCompilation(compId, compilation);
     }
 }

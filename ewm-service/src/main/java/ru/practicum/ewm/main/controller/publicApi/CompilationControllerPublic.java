@@ -21,7 +21,7 @@ public class CompilationControllerPublic {
 
     @GetMapping("/{compId}")
     public CompilationResponseDto getCompilation(@PathVariable @Min(0) long compId) {
-        log.debug("Public: get compilation by id: {}", compId);
+        log.debug("Public: получение подборки с id: {}", compId);
         return compilationService.getCompilationById(compId);
     }
 
@@ -29,7 +29,7 @@ public class CompilationControllerPublic {
     public List<CompilationResponseDto> getCompilations(@RequestParam(required = false) boolean pinned,
                                                         @RequestParam(defaultValue = "0") int from,
                                                         @RequestParam(defaultValue = "10") int size) {
-        log.debug("Public: get compilation");
+        log.debug("Public: получение подборок");
         return compilationService.getCompilationsPublic(pinned, size, from);
     }
 }

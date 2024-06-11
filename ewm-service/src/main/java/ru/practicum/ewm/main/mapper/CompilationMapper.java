@@ -27,7 +27,7 @@ public class CompilationMapper {
     }
 
     public static Compilation toUpdateCompilation(Compilation oldCompilation, CompilationDto newCompilation,
-                                                                 List<Long> events) {
+                                                  List<Long> events) {
         return Compilation.builder()
                 .id(oldCompilation.getId())
                 .title(newCompilation.getTitle() != null ? newCompilation.getTitle() : oldCompilation.getTitle())
