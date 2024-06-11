@@ -1,15 +1,11 @@
 package ru.practicum.ewm.main.dto.event;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import ru.practicum.ewm.main.dto.CategoryDto;
 import ru.practicum.ewm.main.dto.UserDto;
+import ru.practicum.ewm.main.dto.CategoryDto;
 import ru.practicum.ewm.main.model.event.EventState;
 import ru.practicum.ewm.main.model.event.Location;
+import lombok.*;
+
 
 @NoArgsConstructor
 @AllArgsConstructor

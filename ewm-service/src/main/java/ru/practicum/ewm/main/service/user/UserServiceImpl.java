@@ -1,9 +1,5 @@
 package ru.practicum.ewm.main.service.user;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import ru.practicum.ewm.main.dto.UserDto;
 import ru.practicum.ewm.main.exception.ConflictDataException;
 import ru.practicum.ewm.main.exception.IncorrectDataException;
@@ -11,6 +7,10 @@ import ru.practicum.ewm.main.exception.NoDataException;
 import ru.practicum.ewm.main.mapper.UserMapper;
 import ru.practicum.ewm.main.model.User;
 import ru.practicum.ewm.main.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,30 +27,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto addUser(UserDto user) {
         if (user.getEmail() == null || user.getEmail().isBlank()) {
-            throw new IncorrectDataException("Поле: email. Ошибка: не должен быть пуст. Значение: null");
+            throw new IncorrectDataException("Field: email. Error: must not be blank. Value: null");
         }
         if (user.getName() == null || user.getName().isBlank()) {
-            throw new IncorrectDataException("Поле: name. Ошибка: не должен быть пуст. Значение: null");
+            throw new IncorrectDataException("Field: name. Error: must not be blank. Value: null");
         }
         if (user.getName().length() < 2 || user.getName().length() > 250) {
-            throw new IncorrectDataException("Поле: name. Ошибка: длина должна быть > 2 && < 250. Значение: " + user.getName().length());
+            throw new IncorrectDataException("Field: name. Error: must be > 2 && < 250. Value: " + user.getName().length());
         }
         if (user.getEmail().length() < 6 || user.getEmail().length() > 254) {
-            throw new IncorrectDataException("Поле: email. Ошибка: длина должна быть > 6 && < 254. Значение: " + user.getEmail().length());
+            throw new IncorrectDataException("Field: email. Error: must be > 6 && < 254. Value: " + user.getEmail().length());
         }
 
         if (userRepository.findUserByName(user.getName()).isPresent()) {
-            throw new ConflictDataException("Поле: name. Ошибка: имя должно быть уникальным");
+            throw new ConflictDataException("Field: name. Error: name must be unique");
         }
-
-        User userFromDb = userRepository.save(toUser(user));
+         User userFromDb = userRepository.save(toUser(user));
         return toUserDto(userFromDb);
     }
 
     @Override
     public UserDto deleteUser(long userId) {
         User userFromDb = userRepository.findById(userId)
-                .orElseThrow(() -> new NoDataException("Пользователь с id = " + userId + " не найден"));
+                .orElseThrow(() -> new NoDataException("User with id = " + userId + " was not found"));
         userRepository.delete(userFromDb);
         return toUserDto(userFromDb);
     }
@@ -62,9 +61,8 @@ public class UserServiceImpl implements UserService {
         if (ids == null) {
             result = userRepository.getAllUsersWithPageable(page);
         } else {
-            result = userRepository.getUserByIdsWithPageable(ids, page);
+            result = userRepository.getUsersByIdsWithPageable(ids, page);
         }
-
         return result.stream()
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());

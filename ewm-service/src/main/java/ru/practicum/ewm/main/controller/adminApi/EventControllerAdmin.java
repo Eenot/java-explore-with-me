@@ -1,19 +1,12 @@
 package ru.practicum.ewm.main.controller.adminApi;
 
+import ru.practicum.ewm.main.dto.event.EventFullDto;
+import ru.practicum.ewm.main.dto.event.NewEventDto;
+import ru.practicum.ewm.main.service.event.EventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import ru.practicum.ewm.main.dto.event.EventFullDto;
-import ru.practicum.ewm.main.dto.event.NewEventDto;
-import ru.practicum.ewm.main.dto.search.AdminSearchEventsParamsDto;
-import ru.practicum.ewm.main.service.event.EventService;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Min;
 import java.util.List;
@@ -32,22 +25,12 @@ public class EventControllerAdmin {
                                                 @RequestParam(required = false) List<Long> categories, @RequestParam(required = false) String rangeStart,
                                                 @RequestParam(required = false) String rangeEnd, @RequestParam(defaultValue = "0") int from,
                                                 @RequestParam(defaultValue = "10") int size) {
-        log.debug("Admin: поиск событий");
-        AdminSearchEventsParamsDto params = AdminSearchEventsParamsDto.builder()
-                .userIds(users)
-                .categoriesIds(categories)
-                .rangeStart(rangeStart)
-                .rangeEnd(rangeEnd)
-                .states(states)
-                .from(from)
-                .size(size)
-                .build();
-        return eventService.findEventsBySearch(params);
+        return eventService.findEventsBySearch(users, categories, states, rangeStart, rangeEnd, from, size);
     }
 
     @PatchMapping("/events/{eventId}")
     public EventFullDto updateEventByAdmin(@PathVariable @Min(0) long eventId, @RequestBody NewEventDto event) {
-        log.debug("Admin: обновление события с id: {}", eventId);
+        log.debug("Admin: updating event with id: {}", eventId);
         return eventService.updateEventByAdmin(eventId, event);
     }
 }

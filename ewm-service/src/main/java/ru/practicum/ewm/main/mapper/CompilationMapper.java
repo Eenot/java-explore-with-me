@@ -9,11 +9,11 @@ import java.util.List;
 
 public class CompilationMapper {
 
-    public static Compilation toCompilation(CompilationDto compilationDto) {
+    public static Compilation toCompilation(CompilationDto compilation) {
         return Compilation.builder()
-                .events(compilationDto.getEvents())
-                .title(compilationDto.getTitle())
-                .pinned(compilationDto.getPinned())
+                .events(compilation.getEvents())
+                .title(compilation.getTitle())
+                .pinned(compilation.getPinned())
                 .build();
     }
 
@@ -26,7 +26,8 @@ public class CompilationMapper {
                 .build();
     }
 
-    public static Compilation toUpdateCompilation(Compilation oldCompilation, CompilationDto newCompilation, List<Long> events) {
+    public static Compilation toUpdateCompilation(Compilation oldCompilation, CompilationDto newCompilation,
+                                                                 List<Long> events) {
         return Compilation.builder()
                 .id(oldCompilation.getId())
                 .title(newCompilation.getTitle() != null ? newCompilation.getTitle() : oldCompilation.getTitle())

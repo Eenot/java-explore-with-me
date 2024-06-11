@@ -1,9 +1,5 @@
 package ru.practicum.ewm.main.service.category;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import ru.practicum.ewm.main.dto.CategoryDto;
 import ru.practicum.ewm.main.exception.ConflictDataException;
 import ru.practicum.ewm.main.exception.IncorrectDataException;
@@ -13,6 +9,10 @@ import ru.practicum.ewm.main.model.Category;
 import ru.practicum.ewm.main.model.event.Event;
 import ru.practicum.ewm.main.repository.CategoryRepository;
 import ru.practicum.ewm.main.repository.EventRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,18 +24,18 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final EventRepository eventRepository;
 
+
     @Override
     public CategoryDto addCategory(CategoryDto categoryDto) {
         if (categoryDto.getName() == null || categoryDto.getName().isBlank()) {
-            throw new IncorrectDataException("Поле: name. Ошибка: не должно быть пустым. Значение: null");
+            throw new IncorrectDataException("Field: name. Error: must not be blank. Value: null");
         }
         checkNameLength(categoryDto.getName().length());
 
-        Category categoryWithName = categoryRepository.findCategoryByName(categoryDto.getName()).orElse(null);
-        if (categoryWithName != null) {
-            throw new ConflictDataException("Поле: name. Название должно быть уникальным!");
+        Category catWithName = categoryRepository.findCategoryByName(categoryDto.getName()).orElse(null);
+        if (catWithName != null) {
+            throw new ConflictDataException("Field: name. Name must be unique");
         }
-
         Category category = categoryRepository.save(CategoryMapper.toCategory(categoryDto));
         return CategoryMapper.toCategoryDto(category);
     }
@@ -45,27 +45,25 @@ public class CategoryServiceImpl implements CategoryService {
         if (categoryDto.getName() == null) {
             categoryDto.setName("");
         }
-
         checkNameLength(categoryDto.getName().length());
-        Category categoryWithName = categoryRepository.findCategoryByName(categoryDto.getName()).orElse(null);
-        if (categoryWithName != null && categoryWithName.getId() != categoryDto.getId()) {
-            throw new ConflictDataException("Поле: name. Название должно быть уникальным!");
+        Category catWithName = categoryRepository.findCategoryByName(categoryDto.getName()).orElse(null);
+        if (catWithName != null && catWithName.getId() != categoryDto.getId()) {
+            throw new ConflictDataException("Field: name. Name must be unique");
         }
-
-        Category categoryFromDb = findCategory(categoryDto.getId());
-        Category newCategory = CategoryMapper.toCategoryUpdate(categoryDto, categoryFromDb);
+        Category catFromDb = findCategory(categoryDto.getId());
+        Category newCategory = CategoryMapper.toCategoryUpdate(categoryDto, catFromDb);
         categoryRepository.save(newCategory);
         return CategoryMapper.toCategoryDto(newCategory);
     }
 
     @Override
-    public void deleteCategory(long categoryId) {
-        findCategory(categoryId);
-        List<Event> eventsWithCategory = eventRepository.findEventByCategory(categoryId);
+    public void deleteCategory(long catId) {
+        findCategory(catId);
+        List<Event> eventsWithCategory = eventRepository.findEventByCategory(catId);
         if (eventsWithCategory.size() > 0) {
-            throw new ConflictDataException("Поле: category. Невозможно удалить категорию с событиями");
+            throw new ConflictDataException("Filed: category. Can't delete the category with events");
         }
-        categoryRepository.deleteById(categoryId);
+        categoryRepository.deleteById(catId);
     }
 
     @Override
@@ -78,19 +76,19 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto getCategoryInfoById(long categoryId) {
-        Category categoryFromDb = findCategory(categoryId);
-        return CategoryMapper.toCategoryDto(categoryFromDb);
-    }
-
-    private void checkNameLength(long len) {
-        if (len > 50) {
-            throw new IncorrectDataException("Поле: name. Ошибка: длина должна быть < 50. Значение: " + len);
-        }
+    public CategoryDto getCategoryInfo(long catId) {
+        Category catFromDb = findCategory(catId);
+        return CategoryMapper.toCategoryDto(catFromDb);
     }
 
     private Category findCategory(long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new NoDataException("Категория с id = " + id + " не найдена"));
+                .orElseThrow(() -> new NoDataException("Category with id = " + id + " was not found"));
+    }
+
+    private void checkNameLength(long len) {
+        if (len > 50) {
+            throw new IncorrectDataException("Field: name. Error: length must be < 50. Value: " + len);
+        }
     }
 }

@@ -9,11 +9,11 @@ public interface CompilationService {
 
     CompilationResponseDto createCompilation(CompilationDto compilation);
 
-    CompilationResponseDto getCompilationById(long compilationId);
+    CompilationResponseDto getCompilationById(long compId);
 
     List<CompilationResponseDto> getCompilationsPublic(boolean pinned, int size, int from);
 
-    void deleteCompilation(long compilationId);
+    void deleteCompilation(long comId);
 
-    CompilationResponseDto updateCompilation(long compilationId, CompilationDto compilation);
+    CompilationResponseDto updateCompilation(long compId, CompilationDto compilation);
 }

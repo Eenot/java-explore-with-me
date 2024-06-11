@@ -1,7 +1,5 @@
 package ru.practicum.ewm.main.service.request;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import ru.practicum.ewm.main.dto.request.RequestDto;
 import ru.practicum.ewm.main.dto.request.RequestListDto;
 import ru.practicum.ewm.main.dto.request.RequestUpdateStatusDto;
@@ -17,6 +15,8 @@ import ru.practicum.ewm.main.model.request.RequestStatus;
 import ru.practicum.ewm.main.repository.EventRepository;
 import ru.practicum.ewm.main.repository.RequestRepository;
 import ru.practicum.ewm.main.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,20 +33,20 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public RequestDto createRequest(long userId, long eventId) {
         if (requestRepository.findUserRequestToEvent(eventId, userId).isPresent()) {
-            throw new ConflictDataException("Поле: request. Ошибка: запрос уже существует");
+            throw new ConflictDataException("Field: request. Error: request уже существует");
         }
         Event eventFromDb = findEventById(eventId);
         User userFromDb = findUserById(userId);
 
         if (eventFromDb.getInitiator().getId() == userId) {
-            throw new ConflictDataException("Поле: request. Ошибка: инициатор не может пойти на своё мероприятие");
+            throw new ConflictDataException("Field: request. Error: инициатор не может пойти на своё мероприятие");
         }
         if (!eventFromDb.getState().equals(EventState.PUBLISHED)) {
-            throw new ConflictDataException("Поле: request. Ошибка: нельзя учавствовать в неопубликованном событии");
+            throw new ConflictDataException("Field: request. Error: нельзя учавствовать в неопубликованном событии");
         }
         if ((eventFromDb.getConfirmedRequests() >= eventFromDb.getParticipantLimit())
                 && (eventFromDb.getConfirmedRequests() != 0 && eventFromDb.getParticipantLimit() != 0)) {
-            throw new ConflictDataException("Поле: request. Ошибка: у события достигнут максимум участников");
+            throw new ConflictDataException("Field: request. Error: у события достигнут максимум участников");
         }
 
         RequestStatus status;
@@ -74,9 +74,9 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public RequestDto cancelUserRequest(long userId, long requestId) {
         Request request = requestRepository.findById(requestId)
-                .orElseThrow(() -> new NoDataException("Запрос с id = " + requestId + " не найден"));
+                .orElseThrow(() -> new NoDataException("Request with id = " + requestId + " was not found"));
         if (userId != request.getRequester().getId()) {
-            throw new ForbiddenDataException("Поле: request. Ошибка: пользователь отменяет не свой запрос");
+            throw new ForbiddenDataException("Field: request. Error: пользователь отменяет не свой запрос");
         }
         request.setStatus(RequestStatus.CANCELED);
         requestRepository.save(request);
@@ -99,13 +99,13 @@ public class RequestServiceImpl implements RequestService {
         Event userEvent = findEventById(eventId);
 
         if (userId != userEvent.getInitiator().getId()) {
-            throw new ConflictDataException("Поле: request. Ошибка: пользователь не инициатор события");
+            throw new ConflictDataException("Field: request. Error: пользователь не инициатор события");
         }
         if (userEvent.getConfirmedRequests() >= userEvent.getParticipantLimit()) {
-            throw new ConflictDataException("Поле: request. Ошибка: у события достигнут максимум участников");
+            throw new ConflictDataException("Field: request. Error: у события достигнут максимум участников");
         }
         if (!userEvent.getState().equals(EventState.PUBLISHED)) {
-            throw new ConflictDataException("Поле: request. Ошибка: нельзя принимать приглашение в неопуликованном событии");
+            throw new ConflictDataException("Field: request. Error: нельзя принимать приглашение в неопуликованном событии");
         }
 
         List<Request> requests = requestRepository.findRequestsByIds(request.getRequestIds());
@@ -142,11 +142,11 @@ public class RequestServiceImpl implements RequestService {
 
     private User findUserById(long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new NoDataException("Пользователь с id = " + userId + " не найден"));
+                .orElseThrow(() -> new NoDataException("User with id = " + userId + " was not found"));
     }
 
     private Event findEventById(long eventId) {
         return eventRepository.findById(eventId)
-                .orElseThrow(() -> new NoDataException("Событие с id = " + eventId + " не найдено"));
+                .orElseThrow(() -> new NoDataException("Event with id = " + eventId + " was not found"));
     }
 }

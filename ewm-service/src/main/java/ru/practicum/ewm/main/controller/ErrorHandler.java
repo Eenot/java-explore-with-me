@@ -1,17 +1,16 @@
 package ru.practicum.ewm.main.controller;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.ServletRequestBindingException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.practicum.ewm.main.exception.ConflictDataException;
 import ru.practicum.ewm.main.exception.ForbiddenDataException;
 import ru.practicum.ewm.main.exception.IncorrectDataException;
 import ru.practicum.ewm.main.exception.NoDataException;
 import ru.practicum.ewm.main.model.ApiError;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.ServletRequestBindingException;
 
 import javax.validation.ConstraintViolationException;
 import java.io.PrintWriter;
@@ -127,19 +126,5 @@ public class ErrorHandler {
                 .build();
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ApiError handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        log.error("400: {}", e.getMessage());
-        StringWriter out = new StringWriter();
-        e.printStackTrace(new PrintWriter(out));
-        String stackTrace = out.toString();
-        return ApiError.builder()
-                .status(HttpStatus.FORBIDDEN)
-                .reason("Validation not passed. Null data.")
-                .message(e.getMessage())
-                .errors(Collections.singletonList(stackTrace))
-                .build();
-    }
 
 }

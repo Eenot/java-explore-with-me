@@ -6,19 +6,18 @@ import ru.practicum.ewm.main.model.Category;
 public class CategoryMapper {
 
     public static Category toCategory(CategoryDto categoryDto) {
-        return Category.builder()
+        return  Category.builder()
                 .name(categoryDto.getName())
                 .build();
     }
 
-    public static Category toCategoryUpdate(CategoryDto newCategory, Category oldCategory) {
-        if (newCategory.getName().isEmpty()) {
-            newCategory.setName(null);
+    public static Category toCategoryUpdate(CategoryDto newCat, Category oldCat) {
+        if (newCat.getName().isEmpty()) {
+            newCat.setName(null);
         }
-
         return Category.builder()
-                .id(newCategory.getId())
-                .name(newCategory.getName() != null ? newCategory.getName() : oldCategory.getName())
+                .id(newCat.getId())
+                .name(newCat.getName() != null ? newCat.getName() : oldCat.getName())
                 .build();
     }
 

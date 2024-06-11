@@ -1,9 +1,9 @@
 package ru.practicum.stat.server.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 import ru.practicum.stat.server.model.EndpointHit;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,5 +18,5 @@ public interface HitRepository extends JpaRepository<EndpointHit, Long> {
     long findHitByUriAndUniqueIp(LocalDateTime start, LocalDateTime end, String uri);
 
     @Query("SELECT e.uri FROM EndpointHit e WHERE e.timestamp BETWEEN :start AND :end")
-    List<String> findAllHitsBetweenDates(LocalDateTime start, LocalDateTime end);
+    List<String> findAllHipsBetweenDates(LocalDateTime start, LocalDateTime end);
 }

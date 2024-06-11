@@ -1,9 +1,5 @@
 package ru.practicum.ewm.main.service.compilation;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import ru.practicum.ewm.main.dto.compilation.CompilationDto;
 import ru.practicum.ewm.main.dto.compilation.CompilationResponseDto;
 import ru.practicum.ewm.main.dto.event.EventShortDto;
@@ -13,14 +9,16 @@ import ru.practicum.ewm.main.mapper.EventMapper;
 import ru.practicum.ewm.main.model.Compilation;
 import ru.practicum.ewm.main.repository.CompilationRepository;
 import ru.practicum.ewm.main.repository.EventRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.practicum.ewm.main.mapper.CompilationMapper.toCompilation;
-import static ru.practicum.ewm.main.mapper.CompilationMapper.toCompilationResponseDto;
-import static ru.practicum.ewm.main.mapper.CompilationMapper.toUpdateCompilation;
+import static ru.practicum.ewm.main.mapper.CompilationMapper.*;
 
 @Service
 @RequiredArgsConstructor
@@ -32,10 +30,11 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     public CompilationResponseDto createCompilation(CompilationDto compilation) {
         if (compilation.getTitle() == null || compilation.getTitle().isBlank()) {
-            throw new IncorrectDataException("Поле: title. Ошибка: не должен быть пусть. Значение: null");
+            throw new IncorrectDataException("Field: title. Error: must not be blank. Value: null");
         }
         if (compilation.getTitle().length() > 50) {
-            throw new IncorrectDataException("Поле: title. Ошибка: длина должна быть < 50. Значение: >50");
+            throw new IncorrectDataException("Field: title. Error: must be < 50. Value: >50");
+
         }
         if (compilation.getPinned() == null) {
             compilation.setPinned(false);
@@ -46,12 +45,6 @@ public class CompilationServiceImpl implements CompilationService {
         return toCompilationResponseDto(saved, events);
     }
 
-    @Override
-    public CompilationResponseDto getCompilationById(long compilationId) {
-        Compilation fromDb = getCompilation(compilationId);
-        List<EventShortDto> events = getEventsByIds(fromDb.getEvents());
-        return toCompilationResponseDto(fromDb, events);
-    }
 
     @Override
     public List<CompilationResponseDto> getCompilationsPublic(boolean pinned, int size, int from) {
@@ -66,14 +59,14 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public void deleteCompilation(long compilationId) {
-        getCompilation(compilationId);
-        compilationRepository.deleteById(compilationId);
+    public void deleteCompilation(long comId) {
+        getCompilation(comId);
+        compilationRepository.deleteById(comId);
     }
 
     @Override
-    public CompilationResponseDto updateCompilation(long compilationId, CompilationDto compilation) {
-        Compilation fromDb = getCompilation(compilationId);
+    public CompilationResponseDto updateCompilation(long compId, CompilationDto compilation) {
+        Compilation fromDb = getCompilation(compId);
         List<Long> ids;
 
         if (compilation.getEvents() != null) {
@@ -83,9 +76,8 @@ public class CompilationServiceImpl implements CompilationService {
         }
 
         if (compilation.getTitle() != null && compilation.getTitle().length() > 50) {
-            throw new IncorrectDataException("Поле: title. Ошибка: длина должна быть менее 50!");
+            throw new IncorrectDataException("Field: title. Error: title length must be less then 50!");
         }
-
         Compilation newCompilationToSave = toUpdateCompilation(fromDb, compilation, ids);
 
         List<EventShortDto> events = getEventsByIds(ids);
@@ -94,14 +86,22 @@ public class CompilationServiceImpl implements CompilationService {
         return toCompilationResponseDto(newCompilationToSave, events);
     }
 
+    @Override
+    public CompilationResponseDto getCompilationById(long compId) {
+        Compilation fromDb = getCompilation(compId);
+        List<EventShortDto> events = getEventsByIds(fromDb.getEvents());
+        return toCompilationResponseDto(fromDb, events);
+    }
+
+
     private List<EventShortDto> getEventsByIds(List<Long> ids) {
         return eventRepository.findEventsByIds(ids).stream()
                 .map(EventMapper::toEventShortDto)
                 .collect(Collectors.toList());
     }
 
-    private Compilation getCompilation(long compilationId) {
-        return compilationRepository.findById(compilationId)
-                .orElseThrow(() -> new NoDataException("Подборка с id = " + compilationId + " не найдена"));
+    private Compilation getCompilation(long compId) {
+        return compilationRepository.findById(compId)
+                .orElseThrow(() -> new NoDataException("Compilation with id = " + compId + " was not found"));
     }
 }

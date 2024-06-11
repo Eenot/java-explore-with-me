@@ -1,19 +1,14 @@
 package ru.practicum.ewm.main.model.event;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Embeddable;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Setter
 @Getter
+@Setter
 @EqualsAndHashCode
 @Embeddable
 public class Location {

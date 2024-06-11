@@ -1,17 +1,10 @@
 package ru.practicum.ewm.main.service.event;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import ru.practicum.client.StatsClient;
 import ru.practicum.dto.HitDto;
 import ru.practicum.ewm.main.dto.event.EventFullDto;
-import ru.practicum.ewm.main.dto.event.EventShortDto;
 import ru.practicum.ewm.main.dto.event.NewEventDto;
-import ru.practicum.ewm.main.dto.search.AdminSearchEventsParamsDto;
-import ru.practicum.ewm.main.dto.search.PublicSearchEventsParamsDto;
 import ru.practicum.ewm.main.exception.ConflictDataException;
+import ru.practicum.ewm.main.dto.event.EventShortDto;
 import ru.practicum.ewm.main.exception.IncorrectDataException;
 import ru.practicum.ewm.main.exception.NoDataException;
 import ru.practicum.ewm.main.mapper.EventMapper;
@@ -22,6 +15,11 @@ import ru.practicum.ewm.main.model.event.EventState;
 import ru.practicum.ewm.main.repository.CategoryRepository;
 import ru.practicum.ewm.main.repository.EventRepository;
 import ru.practicum.ewm.main.repository.UserRepository;
+import ru.practicum.client.StatsClient;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -30,8 +28,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
 
     private final UserRepository userRepository;
@@ -42,36 +40,36 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto createEvent(NewEventDto eventDto, long userId) {
         if (eventDto.getCategory() == null) {
-            throw new IncorrectDataException("Поле: category. Ошибка: не может быть пустым. Значение: null");
+            throw new IncorrectDataException("Field: category. Error: must not be blank. Value: null");
         }
         if (eventDto.getAnnotation() == null) {
-            throw new IncorrectDataException("Поле: annotation. Ошибка: не может быть пустым. Значение: null");
+            throw new IncorrectDataException("Field: annotation. Error: must not be blank. Value: null");
         }
         if (eventDto.getEventDate() == null) {
-            throw new IncorrectDataException("Поле: event date. Ошибка: не может быть пустым. Значение: null");
+            throw new IncorrectDataException("Field: event date. Error: must not be blank. Value: null");
         }
         if (eventDto.getDescription() == null) {
-            throw new IncorrectDataException("Поле: description. Ошибка: не может быть пустым. Значение: null");
+            throw new IncorrectDataException("Field: description. Error: must not be blank. Value: null");
         }
         if (eventDto.getLocation() == null) {
-            throw new IncorrectDataException("Поле: location. Ошибка: не может быть пустым. Значение: null");
+            throw new IncorrectDataException("Field: location. Error: must not be blank. Value: null");
         }
         if (eventDto.getTitle() == null) {
-            throw new IncorrectDataException("Поле: title. Ошибка: не может быть пустым. Значение: null");
+            throw new IncorrectDataException("Field: title. Error: must not be blank. Value: null");
         }
 
         if (eventDto.getDescription().isBlank()) {
-            throw new IncorrectDataException("Поле: description. Ошибка: не может быть пустым. Значение: blank");
+            throw new IncorrectDataException("Field: description. Error: must not be blank. Value: blank");
         }
         if (eventDto.getAnnotation().isBlank()) {
-            throw new IncorrectDataException("Поле: annotation. Ошибка: не может быть пустым. Значение: blank");
+            throw new IncorrectDataException("Field: annotation. Error: must not be blank. Value: blank");
         }
 
         checkAboutEventInfo(eventDto);
 
         LocalDateTime eventTime = EventMapper.toDateFromString(eventDto.getEventDate());
         if (LocalDateTime.now().until(eventTime, ChronoUnit.HOURS) < 2) {
-            throw new IncorrectDataException("Поле: eventDate. Ошибка: должно содержать дату, которая еще не наступила. Значение: " + eventDto.getEventDate());
+            throw new IncorrectDataException("Field: eventDate. Error: должно содержать дату, которая еще не наступила. Value: " + eventDto.getEventDate());
         }
 
         if (eventDto.getPaid() == null) {
@@ -103,24 +101,24 @@ public class EventServiceImpl implements EventService {
     public EventFullDto getUserEventById(long userId, long eventId) {
         findUserById(userId);
         return EventMapper.toEventFullDtoFromEvent(eventRepository.findEventById(userId, eventId)
-                .orElseThrow(() -> new NoDataException("Событие с id = " + eventId + " не найдено")));
+                .orElseThrow(() -> new NoDataException("Event with id = " + eventId + " was not found")));
     }
 
     @Override
     public EventFullDto updateEventById(long userId, long eventId, NewEventDto newEvent) {
         Event eventFromDb = eventRepository.findEventById(userId, eventId)
-                .orElseThrow(() -> new NoDataException("Событие с id = " + eventId + " не найдено"));
+                .orElseThrow(() -> new NoDataException("Event with id = " + eventId + " was not found"));
         Category category = null;
         if (newEvent.getCategory() != null) {
             category = findCategoryById(newEvent.getCategory());
         }
         if (eventFromDb.getState().equals(EventState.PUBLISHED)) {
-            throw new ConflictDataException("Только отменённые события или события в ожидании могут быть изменены");
+            throw new ConflictDataException("Only pending or canceled events can be changed");
         }
         if (newEvent.getEventDate() != null && !newEvent.getEventDate().isEmpty()) {
             if (LocalDateTime.now().until(EventMapper.toDateFromString(newEvent.getEventDate()), ChronoUnit.HOURS) < 2) {
-                throw new IncorrectDataException("Поле: eventDate. Ошибка: должно содержать дату, которая еще не наступила." +
-                        " Значение: " + newEvent.getEventDate());
+                throw new IncorrectDataException("Field: eventDate. Error: должно содержать дату, которая еще не наступила." +
+                        " Value: " + newEvent.getEventDate());
             }
         }
         checkAboutEventInfo(newEvent);
@@ -131,14 +129,14 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventFullDto> findEventsBySearch(AdminSearchEventsParamsDto params) {
-        Pageable page = PageRequest.of(params.getFrom() / params.getSize(), params.getSize());
+    public List<EventFullDto> findEventsBySearch(List<Long> userIds, List<Long> categoriesIds, List<String> states,
+                                                 String rangeStart, String rangeEnd, int from, int size) {
+        Pageable page = PageRequest.of(from / size, size);
 
         List<EventState> eventStates;
-
-        if (params.getStates() != null) {
-            eventStates = params.getStates().stream()
-                    .map(EventState::convertToEventState)
+        if (states != null) {
+            eventStates = states.stream()
+                    .map(EventState::converToEventState)
                     .collect(Collectors.toList());
         } else {
             eventStates = null;
@@ -147,15 +145,14 @@ public class EventServiceImpl implements EventService {
         LocalDateTime startDate = null;
         LocalDateTime endDate = null;
 
-        if (params.getRangeStart() != null) {
-            startDate = EventMapper.toDateFromString(params.getRangeStart());
+        if (rangeStart != null) {
+            startDate = EventMapper.toDateFromString(rangeStart);
         }
 
-        if (params.getRangeEnd() != null) {
-            endDate = EventMapper.toDateFromString(params.getRangeEnd());
+        if (rangeEnd != null) {
+            endDate = EventMapper.toDateFromString(rangeEnd);
         }
-        return eventRepository.findEventsBySearchWithSpec(params.getUserIds(), params.getCategoriesIds(), eventStates,
-                        startDate, endDate, page)
+        return eventRepository.findEventsBySearchWithSpec(userIds, categoriesIds, eventStates, startDate, endDate, page)
                 .stream()
                 .map(EventMapper::toEventFullDtoFromEvent)
                 .collect(Collectors.toList());
@@ -164,20 +161,20 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto updateEventByAdmin(long eventId, NewEventDto event) {
         Event eventFromDb = eventRepository.findById(eventId)
-                .orElseThrow(() -> new NoDataException("Событие с id = " + eventId + " не найдено"));
+                .orElseThrow(() -> new NoDataException("Event with id = " + eventId + " was not found"));
         LocalDateTime publishedTime = LocalDateTime.now();
         if (event.getEventDate() != null && !event.getEventDate().isEmpty()) {
             if (publishedTime.until(EventMapper.toDateFromString(event.getEventDate()), ChronoUnit.HOURS) < 1) {
-                throw new IncorrectDataException("Поле: eventDate. Ошибка: разница между временем должна быть не меньше 1 часа." +
-                        " Значение: " + event.getEventDate());
+                throw new IncorrectDataException("Field: eventDate. Error: разница между временем должна быть не меньше 1 часа." +
+                        " Value: " + event.getEventDate());
             }
         }
         if (eventFromDb.getState().equals(EventState.CANCELED)) {
-            throw new ConflictDataException("Поле: eventState. Ошибка: state не должен быть CANCELED для публикации" +
-                    " Значение: CANCELED");
+            throw new ConflictDataException("Field: eventState. Error: state не должен быть CANCELED для публикации" +
+                    " Value: CANCELED");
         }
         if (eventFromDb.getState().equals(EventState.PUBLISHED)) {
-            throw new ConflictDataException("Поле: eventState. Ошибка: event уже опубликован. Значение: PUBLISHED");
+            throw new ConflictDataException("Field: eventState. Error: event уже опубликован. Value: PUBLISHED");
         }
 
         checkAboutEventInfo(event);
@@ -192,45 +189,47 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventShortDto> findEventsByPublicSearch(PublicSearchEventsParamsDto params) {
-        saveStat("/events", params.getIp());
+    public List<EventShortDto> findEventsByPublicSearch(String text, List<Long> categories, Boolean paid, String rangeStart,
+                                                        String rangeEnd, Boolean onlyAvailable, String sort, int from,
+                                                        int size, String ip) {
+        saveStat("/events", ip);
 
-        Pageable page = PageRequest.of(params.getFrom() / params.getSize(), params.getSize());
+        Pageable page = PageRequest.of(from / size, size);
         LocalDateTime start;
         LocalDateTime end = null;
 
-        if (params.getRangeStart() == null) {
+        if (rangeStart == null) {
             start = LocalDateTime.now();
         } else {
-            start = EventMapper.toDateFromString(params.getRangeStart());
+            start = EventMapper.toDateFromString(rangeStart);
         }
 
-        if (params.getRangeEnd() != null) {
-            end = EventMapper.toDateFromString(params.getRangeEnd());
+        if (rangeEnd != null) {
+            end = EventMapper.toDateFromString(rangeEnd);
             if (start.isAfter(end)) {
-                throw new IncorrectDataException("Поле: endDate. Ошибка: конец события не может быть в прошлом");
+                throw new IncorrectDataException("Field: endDate. Error: конец события не может быть в прошлом");
             }
         }
 
-        if (params.getOnlyAvailable() == null) {
-            params.setOnlyAvailable(false);
+        if (onlyAvailable == null) {
+            onlyAvailable = false;
         }
 
         List<Event> result;
 
-        if (params.getOnlyAvailable()) {
-            result = eventRepository.findEventsByPublicSearchOnlyAvailableWithSpec(params.getText(), params.getCategories(),
-                    params.getPaid(), start, end, EventState.PUBLISHED, page);
+        if (onlyAvailable) {
+            result = eventRepository.findEventsByPublicSearchOnlyAvailableWithSpec(text, categories, paid, start, end,
+                    EventState.PUBLISHED, page);
         } else {
-            result = eventRepository.findEventsByPublicSearchWithSpec(params.getText(), params.getCategories(), params.getPaid(),
-                    start, end, EventState.PUBLISHED, page);
+            result = eventRepository.findEventsByPublicSearchWithSpec(text, categories, paid, start, end,
+                    EventState.PUBLISHED, page);
         }
 
-        if (params.getSort() == null) {
-            params.setSort("EVENT_DATE");
+        if (sort == null) {
+            sort = "EVENT_DATE";
         }
 
-        switch (params.getSort()) {
+        switch (sort) {
             case "EVENT_DATE": {
                 result = result.stream()
                         .sorted(Comparator.comparing(Event::getEventDate))
@@ -253,9 +252,9 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto getUserEventByIdPublic(long eventId, String ip) {
         Event eventFromDb = eventRepository.findById(eventId)
-                .orElseThrow(() -> new NoDataException("Событие с id = " + eventId + " не найдено"));
+                .orElseThrow(() -> new NoDataException("Event with id = " + eventId + " was not found"));
         if (!eventFromDb.getState().equals(EventState.PUBLISHED)) {
-            throw new NoDataException("Поле: eventState. Ошибка: event еще не опубликован. Значение: " + eventFromDb.getState());
+            throw new NoDataException("Field: eventState. Error: event еще не опубликован. Value: " + eventFromDb.getState());
         }
         saveStat("/events/" + eventId, ip);
         String body = statsClient.getStats("2020-05-05 00:00:00", "2050-05-05 00:00:00",
@@ -266,12 +265,12 @@ public class EventServiceImpl implements EventService {
 
     private User findUserById(long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new NoDataException("Пользователь с id = " + userId + " не найден"));
+                .orElseThrow(() -> new NoDataException("User with id = " + userId + " was not found"));
     }
 
     private Category findCategoryById(long categoryId) {
         return categoryRepository.findById((categoryId))
-                .orElseThrow(() -> new NoDataException("Категория с id = " + categoryId + " не найдена"));
+                .orElseThrow(() -> new NoDataException("Category with id = " + categoryId + " was not found"));
     }
 
     private void saveStat(String uri, String ip) {
@@ -287,17 +286,17 @@ public class EventServiceImpl implements EventService {
     private void checkAboutEventInfo(NewEventDto newEvent) {
         if (newEvent.getAnnotation() != null) {
             if (newEvent.getAnnotation().length() > 2000 || newEvent.getAnnotation().length() < 20) {
-                throw new IncorrectDataException("Поле: annotation. Ошибка: недопустимая длина");
+                throw new IncorrectDataException("Field: annotation. Error: incorrect length");
             }
         }
         if (newEvent.getDescription() != null) {
             if (newEvent.getDescription().length() > 7000 || newEvent.getDescription().length() < 20) {
-                throw new IncorrectDataException("Поле: desc. Ошибка: недопустимая длина");
+                throw new IncorrectDataException("Field: desc. Error: incorrect length");
             }
         }
         if (newEvent.getTitle() != null) {
             if (newEvent.getTitle().length() > 120 || newEvent.getTitle().length() < 3) {
-                throw new IncorrectDataException("Прое: title. Ошибка: недопустимая длина");
+                throw new IncorrectDataException("Field: title Error: incorrect length");
             }
         }
     }
