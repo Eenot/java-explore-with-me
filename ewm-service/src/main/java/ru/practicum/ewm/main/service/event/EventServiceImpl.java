@@ -82,10 +82,6 @@ public class EventServiceImpl implements EventService {
             eventDto.setRequestModeration(true);
         }
 
-        if (eventDto.getParticipantLimit() < 0) {
-            throw new IncorrectDataException("ошибка");
-        }
-
         User initiator = findUserById(userId);
         Category category = findCategoryById(eventDto.getCategory());
         Event event = EventMapper.toEventFromNewEvent(eventDto, initiator, category, LocalDateTime.now());
@@ -125,11 +121,6 @@ public class EventServiceImpl implements EventService {
                         " Value: " + newEvent.getEventDate());
             }
         }
-
-        if (newEvent.getParticipantLimit() < 0) {
-            throw new IncorrectDataException("ошибка");
-        }
-
         checkAboutEventInfo(newEvent);
 
         Event newMappedEvent = EventMapper.toEventUpdate(eventFromDb, newEvent, category);
@@ -184,10 +175,6 @@ public class EventServiceImpl implements EventService {
         }
         if (eventFromDb.getState().equals(EventState.PUBLISHED)) {
             throw new ConflictDataException("Field: eventState. Error: event уже опубликован. Value: PUBLISHED");
-        }
-
-        if (event.getParticipantLimit() < 0) {
-            throw new IncorrectDataException("ошибка");
         }
 
         checkAboutEventInfo(event);

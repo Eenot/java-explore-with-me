@@ -2,6 +2,7 @@ package ru.practicum.ewm.main.controller.adminApi;
 
 import ru.practicum.ewm.main.dto.event.EventFullDto;
 import ru.practicum.ewm.main.dto.event.NewEventDto;
+import ru.practicum.ewm.main.exception.IncorrectDataException;
 import ru.practicum.ewm.main.service.event.EventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,9 @@ public class EventControllerAdmin {
     @PatchMapping("/events/{eventId}")
     public EventFullDto updateEventByAdmin(@PathVariable @Min(0) long eventId, @RequestBody NewEventDto event) {
         log.debug("Admin: обновление события с id: {}", eventId);
+        if (event.getParticipantLimit() < 0) {
+            throw new IncorrectDataException("ошибка");
+        }
         return eventService.updateEventByAdmin(eventId, event);
     }
 }
