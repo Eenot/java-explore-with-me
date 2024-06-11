@@ -6,6 +6,8 @@ import ru.practicum.ewm.main.model.event.EventState;
 import ru.practicum.ewm.main.model.event.Location;
 import lombok.*;
 
+import javax.validation.constraints.Positive;
+
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,7 +30,10 @@ public class EventFullDto {
     private Location location;
     private Boolean paid;
     private Boolean requestModeration;
+
+    @Positive
     private int participantLimit;
+
     private EventState state;
     private int views;
 }
