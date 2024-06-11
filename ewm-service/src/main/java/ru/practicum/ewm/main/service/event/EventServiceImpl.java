@@ -188,6 +188,11 @@ public class EventServiceImpl implements EventService {
             throw new ConflictDataException("Field: eventState. Error: event уже опубликован. Value: PUBLISHED");
         }
 
+        if (event.getParticipantLimit() < 0) {
+            throw new IncorrectDataException("Field: participantLimit. Error: количество участников не может быть отрицательным. " +
+                    "Value: " + event.getParticipantLimit());
+        }
+
         checkAboutEventInfo(event);
 
         Category category = null;
