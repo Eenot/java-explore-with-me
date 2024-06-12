@@ -82,7 +82,8 @@ public class EventServiceImpl implements EventService {
             eventDto.setRequestModeration(true);
         }
         if (eventDto.getParticipantLimit() < 0) {
-            throw new IncorrectDataException("ошибка");
+            throw new IncorrectDataException("Field: participantLimit. Error: лимит участников события не может быть отрицательным." +
+                    "Value: " + eventDto.getParticipantLimit());
         }
 
         User initiator = findUserById(userId);
@@ -125,6 +126,10 @@ public class EventServiceImpl implements EventService {
             }
         }
         checkAboutEventInfo(newEvent);
+
+        if (newEvent.getParticipantLimit() < 0 || eventFromDb.getParticipantLimit() < 0) {
+            throw new IncorrectDataException("Field: participantLimit. Error: лимит участников события не может быть отрицательным.");
+        }
 
         Event newMappedEvent = EventMapper.toEventUpdate(eventFromDb, newEvent, category);
         eventRepository.save(newMappedEvent);
