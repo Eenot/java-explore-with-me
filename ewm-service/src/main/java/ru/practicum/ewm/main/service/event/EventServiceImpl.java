@@ -124,6 +124,14 @@ public class EventServiceImpl implements EventService {
                         " Value: " + newEvent.getEventDate());
             }
         }
+
+        if (newEvent.getParticipantLimit() == null || newEvent.getParticipantLimit() < 0) {
+            if (newEvent.getParticipantLimit() < 0) {
+                throw new IncorrectDataException("ошибка");
+            }
+            newEvent.setParticipantLimit(0);
+        }
+
         checkAboutEventInfo(newEvent);
 
         Event newMappedEvent = EventMapper.toEventUpdate(eventFromDb, newEvent, category);
