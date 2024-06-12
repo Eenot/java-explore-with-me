@@ -126,9 +126,6 @@ public class EventServiceImpl implements EventService {
         }
         checkAboutEventInfo(newEvent);
 
-        if (newEvent.getParticipantLimit() < 0) {
-            throw new IncorrectDataException("ошибка");
-        }
         Event newMappedEvent = EventMapper.toEventUpdate(eventFromDb, newEvent, category);
         eventRepository.save(newMappedEvent);
         return EventMapper.toEventFullDtoFromEvent(newMappedEvent);
@@ -188,10 +185,6 @@ public class EventServiceImpl implements EventService {
         Category category = null;
         if (event.getCategory() != null) {
             category = findCategoryById(event.getCategory());
-        }
-
-        if (event.getParticipantLimit() < 0) {
-            throw new IncorrectDataException("ошибка");
         }
         Event newEvent = EventMapper.toEventUpdateByAdmin(eventFromDb, event, category, publishedTime);
         eventRepository.save(newEvent);
