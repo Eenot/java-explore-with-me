@@ -76,6 +76,9 @@ public class EventServiceImpl implements EventService {
             eventDto.setPaid(false);
         }
         if (eventDto.getParticipantLimit() == null || eventDto.getParticipantLimit() < 0) {
+            if (eventDto.getParticipantLimit() < 0) {
+                throw new IncorrectDataException("ошибка");
+            }
             eventDto.setParticipantLimit(0);
         }
         if (eventDto.getRequestModeration() == null) {
