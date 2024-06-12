@@ -189,11 +189,6 @@ public class EventServiceImpl implements EventService {
             category = findCategoryById(event.getCategory());
         }
 
-        if (event.getParticipantLimit() < 0) {
-            throw new IncorrectDataException("Field: participantLimit. Error: лимит участников события не может быть отрицательным." +
-                    "Value: " + event.getParticipantLimit());
-        }
-
         Event newEvent = EventMapper.toEventUpdateByAdmin(eventFromDb, event, category, publishedTime);
         eventRepository.save(newEvent);
         return EventMapper.toEventFullDtoFromEvent(newEvent);
