@@ -119,6 +119,12 @@ public class EventServiceImpl implements EventService {
         if (eventFromDb.getState().equals(EventState.PUBLISHED)) {
             throw new ConflictDataException("Только события со статусом PENDING или CANCELED могут быть изменены");
         }
+
+        if (newEvent.getParticipantLimit() < 0) {
+            throw new IncorrectDataException("Field: participantLimit. Error: лимит участников события не может быть отрицательным." +
+                    "Value: " + newEvent.getParticipantLimit());
+        }
+
         if (newEvent.getEventDate() != null && !newEvent.getEventDate().isEmpty()) {
             if (LocalDateTime.now().until(EventMapper.toDateFromString(newEvent.getEventDate()), ChronoUnit.HOURS) < 2) {
                 throw new IncorrectDataException("Field: eventDate. Error: должно содержать дату, которая еще не наступила." +
