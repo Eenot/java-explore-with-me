@@ -120,11 +120,6 @@ public class EventServiceImpl implements EventService {
             throw new ConflictDataException("Только события со статусом PENDING или CANCELED могут быть изменены");
         }
 
-        if (newEvent.getParticipantLimit() < 0) {
-            throw new IncorrectDataException("Field: participantLimit. Error: лимит участников события не может быть отрицательным." +
-                    "Value: " + newEvent.getParticipantLimit());
-        }
-
         if (newEvent.getEventDate() != null && !newEvent.getEventDate().isEmpty()) {
             if (LocalDateTime.now().until(EventMapper.toDateFromString(newEvent.getEventDate()), ChronoUnit.HOURS) < 2) {
                 throw new IncorrectDataException("Field: eventDate. Error: должно содержать дату, которая еще не наступила." +
@@ -135,6 +130,10 @@ public class EventServiceImpl implements EventService {
         checkAboutEventInfo(newEvent);
 
         Event newMappedEvent = EventMapper.toEventUpdate(eventFromDb, newEvent, category);
+        if (newMappedEvent.getParticipantLimit() < 0) {
+            throw new IncorrectDataException("Field: participantLimit. Error: лимит участников события не может быть отрицательным." +
+                    "Value: " + newEvent.getParticipantLimit());
+        }
         eventRepository.save(newMappedEvent);
         return EventMapper.toEventFullDtoFromEvent(newMappedEvent);
     }
