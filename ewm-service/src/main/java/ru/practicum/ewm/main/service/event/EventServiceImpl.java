@@ -127,7 +127,7 @@ public class EventServiceImpl implements EventService {
         }
         checkAboutEventInfo(newEvent);
 
-        if (newEvent.getParticipantLimit() < 0 || eventFromDb.getParticipantLimit() < 0) {
+        if (newEvent.getParticipantLimit() < 0) {
             throw new IncorrectDataException("Field: participantLimit. Error: лимит участников события не может быть отрицательным.");
         }
 
