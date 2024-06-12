@@ -125,11 +125,8 @@ public class EventServiceImpl implements EventService {
                         " Value: " + newEvent.getEventDate());
             }
         }
-        checkAboutEventInfo(newEvent);
 
-        if (newEvent.getParticipantLimit() < 0) {
-            throw new IncorrectDataException("Field: participantLimit. Error: лимит участников события не может быть отрицательным.");
-        }
+        checkAboutEventInfo(newEvent);
 
         Event newMappedEvent = EventMapper.toEventUpdate(eventFromDb, newEvent, category);
         eventRepository.save(newMappedEvent);
@@ -191,6 +188,12 @@ public class EventServiceImpl implements EventService {
         if (event.getCategory() != null) {
             category = findCategoryById(event.getCategory());
         }
+
+        if (event.getParticipantLimit() < 0) {
+            throw new IncorrectDataException("Field: participantLimit. Error: лимит участников события не может быть отрицательным." +
+                    "Value: " + event.getParticipantLimit());
+        }
+
         Event newEvent = EventMapper.toEventUpdateByAdmin(eventFromDb, event, category, publishedTime);
         eventRepository.save(newEvent);
         return EventMapper.toEventFullDtoFromEvent(newEvent);
