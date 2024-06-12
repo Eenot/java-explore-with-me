@@ -75,14 +75,14 @@ public class EventServiceImpl implements EventService {
         if (eventDto.getPaid() == null) {
             eventDto.setPaid(false);
         }
-        if (eventDto.getParticipantLimit() == null || eventDto.getParticipantLimit() < 0) {
-            if (eventDto.getParticipantLimit() < 0) {
-                throw new IncorrectDataException("ошибка");
-            }
+        if (eventDto.getParticipantLimit() == null) {
             eventDto.setParticipantLimit(0);
         }
         if (eventDto.getRequestModeration() == null) {
             eventDto.setRequestModeration(true);
+        }
+        if (eventDto.getParticipantLimit() < 0) {
+            throw new IncorrectDataException("ошибка");
         }
 
         User initiator = findUserById(userId);
@@ -124,16 +124,11 @@ public class EventServiceImpl implements EventService {
                         " Value: " + newEvent.getEventDate());
             }
         }
-
-        if (newEvent.getParticipantLimit() == null || newEvent.getParticipantLimit() < 0) {
-            if (newEvent.getParticipantLimit() < 0) {
-                throw new IncorrectDataException("ошибка");
-            }
-            newEvent.setParticipantLimit(0);
-        }
-
         checkAboutEventInfo(newEvent);
 
+        if (newEvent.getParticipantLimit() < 0) {
+            throw new IncorrectDataException("ошибка");
+        }
         Event newMappedEvent = EventMapper.toEventUpdate(eventFromDb, newEvent, category);
         eventRepository.save(newMappedEvent);
         return EventMapper.toEventFullDtoFromEvent(newMappedEvent);
@@ -193,6 +188,10 @@ public class EventServiceImpl implements EventService {
         Category category = null;
         if (event.getCategory() != null) {
             category = findCategoryById(event.getCategory());
+        }
+
+        if (event.getParticipantLimit() < 0) {
+            throw new IncorrectDataException("ошибка");
         }
         Event newEvent = EventMapper.toEventUpdateByAdmin(eventFromDb, event, category, publishedTime);
         eventRepository.save(newEvent);
