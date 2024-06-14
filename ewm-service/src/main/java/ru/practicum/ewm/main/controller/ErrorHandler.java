@@ -28,12 +28,8 @@ public class ErrorHandler {
         StringWriter out = new StringWriter();
         e.printStackTrace(new PrintWriter(out));
         String stackTrace = out.toString();
-        return ApiError.builder()
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .reason("An exception throws")
-                .message(e.getMessage())
-                .errors(Collections.singletonList(stackTrace))
-                .build();
+        String errorMessage ="An exception throws";
+        return apiErrorReturn(errorMessage, stackTrace, e);
     }
 
     @ExceptionHandler(IncorrectDataException.class)
@@ -43,12 +39,8 @@ public class ErrorHandler {
         StringWriter out = new StringWriter();
         e.printStackTrace(new PrintWriter(out));
         String stackTrace = out.toString();
-        return ApiError.builder()
-                .status(HttpStatus.BAD_REQUEST)
-                .reason("Incorrectly made request.")
-                .message(e.getMessage())
-                .errors(Collections.singletonList(stackTrace))
-                .build();
+        String errorMessage ="Incorrectly made request.";
+        return apiErrorReturn(errorMessage, stackTrace, e);
     }
 
     @ExceptionHandler(ConflictDataException.class)
@@ -58,12 +50,8 @@ public class ErrorHandler {
         StringWriter out = new StringWriter();
         e.printStackTrace(new PrintWriter(out));
         String stackTrace = out.toString();
-        return ApiError.builder()
-                .status(HttpStatus.CONFLICT)
-                .reason("Integrity constraint has been violated.")
-                .message(e.getMessage())
-                .errors(Collections.singletonList(stackTrace))
-                .build();
+        String errorMessage ="Integrity constraint has been violated.";
+        return apiErrorReturn(errorMessage, stackTrace, e);
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -73,12 +61,8 @@ public class ErrorHandler {
         StringWriter out = new StringWriter();
         e.printStackTrace(new PrintWriter(out));
         String stackTrace = out.toString();
-        return ApiError.builder()
-                .status(HttpStatus.NOT_FOUND)
-                .reason("The required object was not found.")
-                .message(e.getMessage())
-                .errors(Collections.singletonList(stackTrace))
-                .build();
+        String errorMessage = "The required object was not found.";
+        return apiErrorReturn(errorMessage, stackTrace, e);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -88,12 +72,8 @@ public class ErrorHandler {
         StringWriter out = new StringWriter();
         e.printStackTrace(new PrintWriter(out));
         String stackTrace = out.toString();
-        return ApiError.builder()
-                .status(HttpStatus.BAD_REQUEST)
-                .reason("The validation by annotation is not passed.")
-                .message(e.getMessage())
-                .errors(Collections.singletonList(stackTrace))
-                .build();
+        String errorMessage = "The validation by annotation is not passed.";
+        return apiErrorReturn(errorMessage, stackTrace, e);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -103,12 +83,8 @@ public class ErrorHandler {
         StringWriter out = new StringWriter();
         e.printStackTrace(new PrintWriter(out));
         String stackTrace = out.toString();
-        return ApiError.builder()
-                .status(HttpStatus.BAD_REQUEST)
-                .reason("The validation by annotation in RequestParam is not passed.")
-                .message(e.getMessage())
-                .errors(Collections.singletonList(stackTrace))
-                .build();
+        String errorMessage = "The validation by annotation in RequestParam is not passed.";
+        return apiErrorReturn(errorMessage, stackTrace, e);
     }
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
@@ -118,9 +94,14 @@ public class ErrorHandler {
         StringWriter out = new StringWriter();
         e.printStackTrace(new PrintWriter(out));
         String stackTrace = out.toString();
+        String errorMessage = "For the requested operation the conditions are not met.";
+        return apiErrorReturn(errorMessage, stackTrace, e);
+    }
+
+    private ApiError apiErrorReturn(String errorMessage, String stackTrace, Exception e) {
         return ApiError.builder()
                 .status(HttpStatus.FORBIDDEN)
-                .reason("For the requested operation the conditions are not met.")
+                .reason(errorMessage)
                 .message(e.getMessage())
                 .errors(Collections.singletonList(stackTrace))
                 .build();

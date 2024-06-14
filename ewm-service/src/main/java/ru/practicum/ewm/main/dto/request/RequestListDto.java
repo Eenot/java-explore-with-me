@@ -7,9 +7,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 public class RequestListDto {
 
     private List<RequestDto> confirmedRequests;

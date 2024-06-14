@@ -4,10 +4,8 @@ import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 @Builder
-@Getter
-@Setter
-@EqualsAndHashCode
 public class UserShortDto {
 
     private long id;

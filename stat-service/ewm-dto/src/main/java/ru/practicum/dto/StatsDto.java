@@ -5,9 +5,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Setter
-@Getter
-@EqualsAndHashCode
+@Data
 public class StatsDto {
 
     private String app;
