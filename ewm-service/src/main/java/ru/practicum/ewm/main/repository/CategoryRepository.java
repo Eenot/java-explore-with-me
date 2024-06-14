@@ -1,9 +1,9 @@
 package ru.practicum.ewm.main.repository;
 
-import ru.practicum.ewm.main.model.Category;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import ru.practicum.ewm.main.model.Category;
 
 import java.util.List;
 import java.util.Optional;

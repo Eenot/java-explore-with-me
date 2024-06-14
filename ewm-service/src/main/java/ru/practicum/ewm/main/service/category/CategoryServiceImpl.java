@@ -1,5 +1,9 @@
 package ru.practicum.ewm.main.service.category;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import ru.practicum.ewm.main.dto.CategoryDto;
 import ru.practicum.ewm.main.exception.ConflictDataException;
 import ru.practicum.ewm.main.exception.IncorrectDataException;
@@ -9,10 +13,6 @@ import ru.practicum.ewm.main.model.Category;
 import ru.practicum.ewm.main.model.event.Event;
 import ru.practicum.ewm.main.repository.CategoryRepository;
 import ru.practicum.ewm.main.repository.EventRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;

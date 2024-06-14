@@ -1,5 +1,7 @@
 package ru.practicum.ewm.main.service.request;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.practicum.ewm.main.dto.request.RequestDto;
 import ru.practicum.ewm.main.dto.request.RequestListDto;
 import ru.practicum.ewm.main.dto.request.RequestUpdateStatusDto;
@@ -15,8 +17,6 @@ import ru.practicum.ewm.main.model.request.RequestStatus;
 import ru.practicum.ewm.main.repository.EventRepository;
 import ru.practicum.ewm.main.repository.RequestRepository;
 import ru.practicum.ewm.main.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;

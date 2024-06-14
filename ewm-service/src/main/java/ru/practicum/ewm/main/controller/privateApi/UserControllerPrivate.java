@@ -1,17 +1,25 @@
 package ru.practicum.ewm.main.controller.privateApi;
 
-import ru.practicum.ewm.main.dto.event.EventFullDto;
-import ru.practicum.ewm.main.dto.request.RequestDto;
-import ru.practicum.ewm.main.dto.event.NewEventDto;
-import ru.practicum.ewm.main.dto.request.RequestListDto;
-import ru.practicum.ewm.main.dto.request.RequestUpdateStatusDto;
-import ru.practicum.ewm.main.service.event.EventService;
-import ru.practicum.ewm.main.service.request.RequestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import ru.practicum.ewm.main.dto.event.EventFullDto;
+import ru.practicum.ewm.main.dto.event.NewEventDto;
+import ru.practicum.ewm.main.dto.request.RequestDto;
+import ru.practicum.ewm.main.dto.request.RequestListDto;
+import ru.practicum.ewm.main.dto.request.RequestUpdateStatusDto;
+import ru.practicum.ewm.main.service.event.EventService;
+import ru.practicum.ewm.main.service.request.RequestService;
 
 import javax.validation.constraints.Min;
 import java.util.List;
@@ -42,14 +50,14 @@ public class UserControllerPrivate {
 
     @GetMapping("/{userId}/events/{eventId}")
     public EventFullDto getUserEventById(@PathVariable @Min(0) long userId, @PathVariable @Min(0) long eventId) {
-        log.debug("Private: получение события по id : {}, пользователя с id: {}",eventId, userId);
+        log.debug("Private: получение события по id : {}, пользователя с id: {}", eventId, userId);
         return eventService.getUserEventById(userId, eventId);
     }
 
     @PatchMapping("/{userId}/events/{eventId}")
     public EventFullDto updateUserEvent(@PathVariable @Min(0) long userId, @PathVariable @Min(0) long eventId,
                                         @RequestBody NewEventDto event) {
-        log.debug("Private: обновление события по id : {}, пользователя с id: {}",eventId, userId);
+        log.debug("Private: обновление события по id : {}, пользователя с id: {}", eventId, userId);
         return eventService.updateEventById(userId, eventId, event);
     }
 

@@ -6,7 +6,7 @@ import ru.practicum.ewm.main.model.Category;
 public class CategoryMapper {
 
     public static Category toCategory(CategoryDto categoryDto) {
-        return  Category.builder()
+        return Category.builder()
                 .name(categoryDto.getName())
                 .build();
     }

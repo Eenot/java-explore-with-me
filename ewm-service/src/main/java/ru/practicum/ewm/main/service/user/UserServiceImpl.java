@@ -1,5 +1,9 @@
 package ru.practicum.ewm.main.service.user;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import ru.practicum.ewm.main.dto.UserDto;
 import ru.practicum.ewm.main.exception.ConflictDataException;
 import ru.practicum.ewm.main.exception.IncorrectDataException;
@@ -7,10 +11,6 @@ import ru.practicum.ewm.main.exception.NoDataException;
 import ru.practicum.ewm.main.mapper.UserMapper;
 import ru.practicum.ewm.main.model.User;
 import ru.practicum.ewm.main.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;

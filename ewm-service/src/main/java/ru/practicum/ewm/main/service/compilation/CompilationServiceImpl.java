@@ -1,5 +1,9 @@
 package ru.practicum.ewm.main.service.compilation;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import ru.practicum.ewm.main.dto.compilation.CompilationDto;
 import ru.practicum.ewm.main.dto.compilation.CompilationResponseDto;
 import ru.practicum.ewm.main.dto.event.EventShortDto;
@@ -9,16 +13,14 @@ import ru.practicum.ewm.main.mapper.EventMapper;
 import ru.practicum.ewm.main.model.Compilation;
 import ru.practicum.ewm.main.repository.CompilationRepository;
 import ru.practicum.ewm.main.repository.EventRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.practicum.ewm.main.mapper.CompilationMapper.*;
+import static ru.practicum.ewm.main.mapper.CompilationMapper.toCompilation;
+import static ru.practicum.ewm.main.mapper.CompilationMapper.toCompilationResponseDto;
+import static ru.practicum.ewm.main.mapper.CompilationMapper.toUpdateCompilation;
 
 @Service
 @RequiredArgsConstructor

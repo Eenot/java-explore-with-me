@@ -1,10 +1,10 @@
 package ru.practicum.ewm.main.repository;
 
-import ru.practicum.ewm.main.model.Compilation;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.data.domain.Pageable;
+import ru.practicum.ewm.main.model.Compilation;
 
 import java.util.List;
 

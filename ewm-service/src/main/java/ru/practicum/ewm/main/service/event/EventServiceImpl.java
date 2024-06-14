@@ -1,10 +1,15 @@
 package ru.practicum.ewm.main.service.event;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import ru.practicum.client.StatsClient;
 import ru.practicum.dto.HitDto;
 import ru.practicum.ewm.main.dto.event.EventFullDto;
+import ru.practicum.ewm.main.dto.event.EventShortDto;
 import ru.practicum.ewm.main.dto.event.NewEventDto;
 import ru.practicum.ewm.main.exception.ConflictDataException;
-import ru.practicum.ewm.main.dto.event.EventShortDto;
 import ru.practicum.ewm.main.exception.IncorrectDataException;
 import ru.practicum.ewm.main.exception.NoDataException;
 import ru.practicum.ewm.main.mapper.EventMapper;
@@ -15,11 +20,6 @@ import ru.practicum.ewm.main.model.event.EventState;
 import ru.practicum.ewm.main.repository.CategoryRepository;
 import ru.practicum.ewm.main.repository.EventRepository;
 import ru.practicum.ewm.main.repository.UserRepository;
-import ru.practicum.client.StatsClient;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;

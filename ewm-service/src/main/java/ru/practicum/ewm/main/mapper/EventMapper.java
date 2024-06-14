@@ -1,10 +1,10 @@
 package ru.practicum.ewm.main.mapper;
 
+import ru.practicum.ewm.main.dto.CategoryDto;
 import ru.practicum.ewm.main.dto.UserDto;
 import ru.practicum.ewm.main.dto.event.EventFullDto;
-import ru.practicum.ewm.main.dto.event.NewEventDto;
-import ru.practicum.ewm.main.dto.CategoryDto;
 import ru.practicum.ewm.main.dto.event.EventShortDto;
+import ru.practicum.ewm.main.dto.event.NewEventDto;
 import ru.practicum.ewm.main.model.Category;
 import ru.practicum.ewm.main.model.User;
 import ru.practicum.ewm.main.model.event.Event;
