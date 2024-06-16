@@ -55,8 +55,8 @@ public class Event {
     private Category category;
     @Embedded
     private Location location;
-    private boolean isPaid;
-    private boolean isRequestModeration;
+    private Boolean isPaid;
+    private Boolean isRequestModeration;
     private int participantLimit;
     @Enumerated(EnumType.STRING)
     private EventState state;
