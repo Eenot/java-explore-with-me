@@ -12,10 +12,10 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    @Query("select u from User u where u.id IN :ids")
+    @Query("SELECT u FROM User u WHERE u.id IN :ids")
     List<User> getUsersByIdsWithPageable(long[] ids, Pageable page);
 
-    @Query("select u from User u")
+    @Query("SELECT u FROM User u")
     List<User> getAllUsersWithPageable(Pageable page);
 
     Optional<User> findUserByName(String name);

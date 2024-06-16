@@ -2,10 +2,8 @@ package ru.practicum.ewm.main.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.checkerframework.common.aliasing.qual.Unique;
 import org.hibernate.validator.constraints.Length;
 
@@ -19,9 +17,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 @Table(name = "categories")
 @Entity
 public class Category {

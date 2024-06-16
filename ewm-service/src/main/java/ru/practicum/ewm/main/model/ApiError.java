@@ -2,19 +2,15 @@ package ru.practicum.ewm.main.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
-@Getter
-@EqualsAndHashCode
+@Data
 @Builder
 public class ApiError {
 

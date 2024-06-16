@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ru.practicum.ewm.main.constants.LengthConstants.CompilationTitleLength;
 import static ru.practicum.ewm.main.mapper.CompilationMapper.toCompilation;
 import static ru.practicum.ewm.main.mapper.CompilationMapper.toCompilationResponseDto;
 import static ru.practicum.ewm.main.mapper.CompilationMapper.toUpdateCompilation;
@@ -29,12 +30,13 @@ public class CompilationServiceImpl implements CompilationService {
     private final CompilationRepository compilationRepository;
     private final EventRepository eventRepository;
 
+
     @Override
     public CompilationResponseDto createCompilation(CompilationDto compilation) {
         if (compilation.getTitle() == null || compilation.getTitle().isBlank()) {
             throw new IncorrectDataException("Field: title. Error: не должно быть пустым. Value: null");
         }
-        if (compilation.getTitle().length() > 50) {
+        if (compilation.getTitle().length() > CompilationTitleLength) {
             throw new IncorrectDataException("Field: title. Error: длина должна быть < 50. Value: >50");
 
         }
@@ -77,7 +79,7 @@ public class CompilationServiceImpl implements CompilationService {
             ids = fromDb.getEvents();
         }
 
-        if (compilation.getTitle() != null && compilation.getTitle().length() > 50) {
+        if (compilation.getTitle() != null && compilation.getTitle().length() > CompilationTitleLength) {
             throw new IncorrectDataException("Field: title. Error: длина должна быть меньше 50!");
         }
         Compilation newCompilationToSave = toUpdateCompilation(fromDb, compilation, ids);

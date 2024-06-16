@@ -11,15 +11,15 @@ import java.util.Optional;
 @Repository
 public interface RequestRepository extends JpaRepository<Request, Long> {
 
-    @Query("select r from Request r where r.event.id = :eventId AND r.requester.id = :requesterId")
+    @Query("SELECT r FROM Request r WHERE r.event.id = :eventId AND r.requester.id = :requesterId")
     Optional<Request> findUserRequestToEvent(long eventId, long requesterId);
 
-    @Query("select r from Request r where r.requester.id = :userId")
+    @Query("SELECT r FROM Request r WHERE r.requester.id = :userId")
     List<Request> findUserRequests(long userId);
 
-    @Query("select r from Request r where r.event.id = :eventId")
+    @Query("SELECT r FROM Request r WHERE r.event.id = :eventId")
     List<Request> findRequestsToEvent(long eventId);
 
-    @Query("select r from Request r where r.id IN :ids")
+    @Query("SELECT r FROM Request r WHERE r.id IN :ids")
     List<Request> findRequestsByIds(List<Long> ids);
 }

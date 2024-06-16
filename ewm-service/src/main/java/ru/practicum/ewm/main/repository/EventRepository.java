@@ -109,15 +109,15 @@ public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecific
         return findAll(specification, page).getContent();
     }
 
-    @Query("select e from Event e where e.initiator.id = :userId")
+    @Query("SELECT e FROM Event e WHERE e.initiator.id = :userId")
     List<Event> getUserEvents(long userId, Pageable page);
 
-    @Query("select e from Event e where e.initiator.id = :userId AND e.id = :eventId")
+    @Query("SELECT e FROM Event e WHERE e.initiator.id = :userId AND e.id = :eventId")
     Optional<Event> findEventById(long userId, long eventId);
 
-    @Query("select e from Event e where e.id IN :ids")
+    @Query("SELECT e FROM Event e WHERE e.id IN :ids")
     List<Event> findEventsByIds(List<Long> ids);
 
-    @Query("select e from Event e where e.category.id = :id")
+    @Query("SELECT e FROM Event e WHERE e.category.id = :id")
     List<Event> findEventByCategory(long id);
 }

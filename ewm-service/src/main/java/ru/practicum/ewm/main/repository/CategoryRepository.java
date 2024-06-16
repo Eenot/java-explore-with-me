@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
-    @Query("select c from Category c")
+    @Query("SELECT c FROM Category c")
     List<Category> getAllCategoriesWithPageable(Pageable page);
 
     Optional<Category> findCategoryByName(String name);

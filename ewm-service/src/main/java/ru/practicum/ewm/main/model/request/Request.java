@@ -2,10 +2,8 @@ package ru.practicum.ewm.main.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.practicum.ewm.main.model.User;
 import ru.practicum.ewm.main.model.event.Event;
@@ -21,12 +19,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
+import static ru.practicum.ewm.main.constants.DateTimeFormatConstant.DateFormatConst;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 @Table(name = "requests")
 @Entity
 public class Request {
@@ -34,7 +32,7 @@ public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = DateFormatConst)
     private LocalDateTime created;
     @ManyToOne
     @JoinColumn(name = "event_id")

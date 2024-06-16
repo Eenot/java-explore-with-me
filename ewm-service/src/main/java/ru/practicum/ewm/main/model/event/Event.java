@@ -2,10 +2,8 @@ package ru.practicum.ewm.main.model.event;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.practicum.ewm.main.model.Category;
 import ru.practicum.ewm.main.model.User;
@@ -23,12 +21,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
+import static ru.practicum.ewm.main.constants.DateTimeFormatConstant.DateFormatConst;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Getter
-@Setter
-@EqualsAndHashCode
+@Data
 @Table(name = "events")
 @Entity
 public class Event {
@@ -41,11 +39,11 @@ public class Event {
     @Column(length = 120)
     private String title;
     private int confirmedRequests;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = DateFormatConst)
     private LocalDateTime createdOn;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = DateFormatConst)
     private LocalDateTime eventDate;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = DateFormatConst)
     private LocalDateTime publishedOn;
     @Column(length = 7000)
     private String description;
@@ -57,8 +55,8 @@ public class Event {
     private Category category;
     @Embedded
     private Location location;
-    private Boolean isPaid;
-    private Boolean isRequestModeration;
+    private boolean isPaid;
+    private boolean isRequestModeration;
     private int participantLimit;
     @Enumerated(EnumType.STRING)
     private EventState state;

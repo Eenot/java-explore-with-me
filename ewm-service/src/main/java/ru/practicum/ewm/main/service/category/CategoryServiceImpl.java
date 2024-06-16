@@ -17,6 +17,8 @@ import ru.practicum.ewm.main.repository.EventRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ru.practicum.ewm.main.constants.LengthConstants.CompilationTitleLength;
+
 @RequiredArgsConstructor
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -87,7 +89,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     private void checkNameLength(long len) {
-        if (len > 50) {
+        if (len > CompilationTitleLength) {
             throw new IncorrectDataException("Field: name. Error: длина должна быть < 50. Value: " + len);
         }
     }
