@@ -109,15 +109,50 @@ public interface EventRepository extends JpaRepository<Event, Long>, JpaSpecific
         return findAll(specification, page).getContent();
     }
 
-    @Query("SELECT e FROM Event e WHERE e.initiator.id = :userId")
+    default List<Event> findEventsByPublicSearchSubscriptions(List<Long> initiatorsId, String text, List<Long> categories, LocalDateTime start,
+                                                              LocalDateTime end, EventState state, Pageable page) {
+        Specification<Event> specification = (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (initiatorsId != null) {
+                predicates.add(root.get("initiator").get("id").in(initiatorsId));
+            }
+
+            if (categories != null) {
+                predicates.add(root.get("category").get("id").in(categories));
+            }
+
+            if (text != null) {
+                String likeText = "%" + text.toLowerCase() + "%";
+                Predicate annotationPredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("annotation")), likeText);
+                Predicate descriptionPredicate = criteriaBuilder.like(criteriaBuilder.lower(root.get("description")), likeText);
+                predicates.add(criteriaBuilder.or(annotationPredicate, descriptionPredicate));
+            }
+            if (start != null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("eventDate"), start));
+            }
+            if (end != null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("eventDate"), end));
+            }
+            if (state != null) {
+                predicates.add(criteriaBuilder.equal(root.get("state"), state));
+            }
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+
+        return findAll(specification, page).getContent();
+    }
+
+    @Query("select e from Event e where e.initiator.id = :userId")
     List<Event> getUserEvents(long userId, Pageable page);
 
-    @Query("SELECT e FROM Event e WHERE e.initiator.id = :userId AND e.id = :eventId")
+    @Query("select e from Event e where e.initiator.id = :userId AND e.id = :eventId")
     Optional<Event> findEventById(long userId, long eventId);
 
-    @Query("SELECT e FROM Event e WHERE e.id IN :ids")
+    @Query("select e from Event e where e.id IN :ids")
     List<Event> findEventsByIds(List<Long> ids);
 
-    @Query("SELECT e FROM Event e WHERE e.category.id = :id")
+    @Query("select e from Event e where e.category.id = :id")
     List<Event> findEventByCategory(long id);
 }
