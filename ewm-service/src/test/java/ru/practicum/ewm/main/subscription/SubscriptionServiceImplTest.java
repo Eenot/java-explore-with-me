@@ -13,7 +13,7 @@ import ru.practicum.ewm.main.dto.subscription.SubscriptionDto;
 import ru.practicum.ewm.main.exception.IncorrectDataException;
 import ru.practicum.ewm.main.exception.NoDataException;
 import ru.practicum.ewm.main.model.Category;
-import ru.practicum.ewm.main.model.SubscriptionEntity;
+import ru.practicum.ewm.main.model.Subscription;
 import ru.practicum.ewm.main.model.User;
 import ru.practicum.ewm.main.model.event.Event;
 import ru.practicum.ewm.main.model.event.EventState;
@@ -56,8 +56,8 @@ public class SubscriptionServiceImplTest {
 
     private User subscriber;
     private User init1;
-    private SubscriptionEntity sub1OnInit1;
-    private SubscriptionEntity subOnInit2;
+    private Subscription sub1OnInit1;
+    private Subscription subOnInit2;
     private Event eventInit1;
     private Event eventInit2;
 
@@ -93,14 +93,14 @@ public class SubscriptionServiceImplTest {
                 .id(3L)
                 .build();
 
-        sub1OnInit1 = SubscriptionEntity.builder()
+        sub1OnInit1 = Subscription.builder()
                 .isSubscribed(true)
                 .timestamp(LocalDateTime.now())
                 .initiator(init1)
                 .subscriber(subscriber)
                 .build();
 
-        subOnInit2 = SubscriptionEntity.builder()
+        subOnInit2 = Subscription.builder()
                 .isSubscribed(true)
                 .timestamp(LocalDateTime.now())
                 .initiator(init2)
