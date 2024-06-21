@@ -10,7 +10,7 @@ import ru.practicum.ewm.main.dto.subscription.SubscriptionDto;
 import ru.practicum.ewm.main.exception.IncorrectDataException;
 import ru.practicum.ewm.main.exception.NoDataException;
 import ru.practicum.ewm.main.mapper.EventMapper;
-import ru.practicum.ewm.main.model.Subscription;
+import ru.practicum.ewm.main.model.SubscriptionEntity;
 import ru.practicum.ewm.main.model.User;
 import ru.practicum.ewm.main.model.event.Event;
 import ru.practicum.ewm.main.model.event.EventState;
@@ -49,14 +49,14 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         }
         List<User> usersFromDb = checkSubscriptionDataAndReturnUsers(subscription, true);
         subscription.setTimestamp(toDateFromString(toStringFromDate(LocalDateTime.now())));
-        Subscription subscriptionToSave = toSubscription(subscription, usersFromDb);
+        SubscriptionEntity subscriptionToSave = toSubscription(subscription, usersFromDb);
         subscriptionRepository.save(subscriptionToSave);
         return toSubscriptionDto(subscriptionToSave);
     }
 
     @Override
     public SubscriptionDto unSubscribe(SubscriptionDto subscription) {
-        Subscription subFromDb = subscriptionRepository.findSubscriptionByIds(subscription.getInitId(),
+        SubscriptionEntity subFromDb = subscriptionRepository.findSubscriptionByIds(subscription.getInitId(),
                 subscription.getSubId(), true).orElse(null);
 
         if (subFromDb == null) {
@@ -64,7 +64,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         }
         checkSubscriptionDataAndReturnUsers(subscription, false);
         subscription.setTimestamp(toDateFromString(toStringFromDate(LocalDateTime.now())));
-        Subscription updated = toSubscriptionUpdate(subscription, subFromDb.getId(), subFromDb);
+        SubscriptionEntity updated = toSubscriptionUpdate(subscription, subFromDb.getId(), subFromDb);
         subscriptionRepository.save(updated);
         return toSubscriptionDto(updated);
     }
@@ -92,7 +92,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public List<EventFullDto> getAllSubscribedEvents(PrivateSearchSubsParams params) {
-        List<Subscription> subscriptions = subscriptionRepository.findSubscriptionsBySubscriberId(params.getSubId())
+        List<SubscriptionEntity> subscriptions = subscriptionRepository.findSubscriptionsBySubscriberId(params.getSubId())
                 .orElseThrow(() -> new NoDataException("Error: subscription. There is no data when search subscriptions by id"));
 
         Pageable page = PageRequest.of(params.getFrom() / params.getSize(), params.getSize());

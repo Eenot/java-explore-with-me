@@ -23,7 +23,7 @@ import static ru.practicum.ewm.main.constants.DateTimeFormatConstant.DateFormatC
 @Data
 @Table(name = "subscriptions")
 @Entity
-public class Subscription {
+public class SubscriptionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

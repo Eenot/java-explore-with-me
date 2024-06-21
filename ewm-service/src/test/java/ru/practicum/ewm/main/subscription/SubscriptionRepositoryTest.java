@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import ru.practicum.client.StatsClient;
 import ru.practicum.ewm.main.model.Category;
-import ru.practicum.ewm.main.model.Subscription;
+import ru.practicum.ewm.main.model.SubscriptionEntity;
 import ru.practicum.ewm.main.model.User;
 import ru.practicum.ewm.main.model.event.Event;
 import ru.practicum.ewm.main.model.event.EventState;
@@ -45,22 +45,22 @@ public class SubscriptionRepositoryTest {
     private static final Pageable PAGE = PageRequest.of(0, 10);
 
     @MockBean
-    StatsClient statsClient;
+    private StatsClient statsClient;
 
     @MockBean
-    HttpServletRequest httpServletRequest;
+    private HttpServletRequest httpServletRequest;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    CategoryRepository categoryRepository;
+    private CategoryRepository categoryRepository;
 
     @Autowired
-    EventRepository eventRepository;
+    private EventRepository eventRepository;
 
     @Autowired
-    SubscriptionRepository subscriptionRepository;
+    private SubscriptionRepository subscriptionRepository;
 
     @BeforeEach
     public void fillData() {
@@ -202,57 +202,57 @@ public class SubscriptionRepositoryTest {
 
     @Test
     void findSubscriptionsBySubId_whenSubbedOnTwoUsers_thenReturnListOfTwoSubscriptions() {
-        subscriptionRepository.save(Subscription.builder()
+        subscriptionRepository.save(SubscriptionEntity.builder()
                 .initiator(userRepository.findById(init1Id).orElse(null))
                 .subscriber(userRepository.findById(subId).orElse(null))
                 .timestamp(LocalDateTime.now())
                 .isSubscribed(true)
                 .build());
 
-        subscriptionRepository.save(Subscription.builder()
+        subscriptionRepository.save(SubscriptionEntity.builder()
                 .initiator(userRepository.findById(init2Id).orElse(null))
                 .subscriber(userRepository.findById(subId).orElse(null))
                 .timestamp(LocalDateTime.now())
                 .isSubscribed(true)
                 .build());
 
-        List<Subscription> result = subscriptionRepository.findSubscriptionsBySubscriberId(subId).orElse(new ArrayList<>());
+        List<SubscriptionEntity> result = subscriptionRepository.findSubscriptionsBySubscriberId(subId).orElse(new ArrayList<>());
 
         assertEquals(2, result.size());
     }
 
     @Test
     void findSubscriptionsBySubIdAndInitId_whenSubbedOnTwoUsers_thenReturnListOfOneSubscriptions() {
-        subscriptionRepository.save(Subscription.builder()
+        subscriptionRepository.save(SubscriptionEntity.builder()
                 .initiator(userRepository.findById(init1Id).orElse(null))
                 .subscriber(userRepository.findById(subId).orElse(null))
                 .timestamp(LocalDateTime.now())
                 .isSubscribed(true)
                 .build());
 
-        subscriptionRepository.save(Subscription.builder()
+        subscriptionRepository.save(SubscriptionEntity.builder()
                 .initiator(userRepository.findById(init2Id).orElse(null))
                 .subscriber(userRepository.findById(subId).orElse(null))
                 .timestamp(LocalDateTime.now())
                 .isSubscribed(true)
                 .build());
 
-        Subscription sub = subscriptionRepository.findSubscriptionByIds(init1Id, subId, true)
-                .orElse(Subscription.builder().build());
+        SubscriptionEntity sub = subscriptionRepository.findSubscriptionByIds(init1Id, subId, true)
+                .orElse(SubscriptionEntity.builder().build());
 
         assertEquals(sub.getInitiator().getId(), init1Id);
     }
 
     @Test
     void findSubscriptionsBySubId_whenSubbedOnTwoUsersAndUnsubbedFromInit1_thenReturnListOfOneSubscriptions() {
-        Subscription subscription = subscriptionRepository.save(Subscription.builder()
+        SubscriptionEntity subscription = subscriptionRepository.save(SubscriptionEntity.builder()
                 .initiator(userRepository.findById(init1Id).orElse(null))
                 .subscriber(userRepository.findById(subId).orElse(null))
                 .timestamp(LocalDateTime.now())
                 .isSubscribed(true)
                 .build());
 
-        subscriptionRepository.save(Subscription.builder()
+        subscriptionRepository.save(SubscriptionEntity.builder()
                 .initiator(userRepository.findById(init2Id).orElse(null))
                 .subscriber(userRepository.findById(subId).orElse(null))
                 .timestamp(LocalDateTime.now())
@@ -262,7 +262,7 @@ public class SubscriptionRepositoryTest {
         subscription.setSubscribed(false);
         subscriptionRepository.save(subscription);
 
-        List<Subscription> result = subscriptionRepository.findSubscriptionsBySubscriberId(subId).orElse(new ArrayList<>());
+        List<SubscriptionEntity> result = subscriptionRepository.findSubscriptionsBySubscriberId(subId).orElse(new ArrayList<>());
         assertEquals(1, result.size());
     }
 
